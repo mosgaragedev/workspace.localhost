@@ -1,0 +1,85 @@
+{
+	"name": "asp-net-core-snippet-pack",
+	"displayName": ".NET Core Snippet Pack",
+	"description": "A snippet pack for .NET Core.",
+	"publisher": "adrianwilczynski",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/AdrianWilczynski/.NETCoreSnippetPack.git"
+	},
+	"version": "1.51.0",
+	"icon": "img/logo.png",
+	"engines": {
+		"vscode": "^1.31.0"
+	},
+	"categories": [
+		"Snippets"
+	],
+	"keywords": [
+		"Snippets",
+		"Snippet",
+		"ASP.NET Core",
+		".NET Core",
+		".NET",
+		"C#",
+		"CSharp",
+		"Razor"
+	],
+	"contributes": {
+		"snippets": [
+			{
+				"language": "csharp",
+				"path": "./snippets/csharp.json"
+			},
+			{
+				"language": "html",
+				"path": "./snippets/razor.json"
+			},
+			{
+				"language": "json",
+				"path": "./snippets/appsettings.json"
+			},
+			{
+				"language": "xml",
+				"path": "./snippets/csproj.json"
+			},
+			{
+				"language": "msbuild",
+				"path": "./snippets/csproj.json"
+			},
+			{
+				"language": "plaintext",
+				"path": "./snippets/ruleset.json"
+			},
+			{
+				"language": "ignore",
+				"path": "./snippets/gitignore.json"
+			},
+			{
+				"language": "javascript",
+				"path": "./snippets/javascript.json"
+			},
+			{
+				"language": "properties",
+				"path": "./snippets/editorconfig.json"
+			},
+			{
+				"language": "html",
+				"path": "./snippets/html.json"
+			},
+			{
+				"language": "markdown",
+				"path": "./snippets/license.json"
+			},
+			{
+				"language": "plaintext",
+				"path": "./snippets/license.json"
+			}
+		]
+	},
+	"__metadata": {
+		"installedTimestamp": 1768036955446,
+		"targetPlatform": "undefined",
+		"size": 557974
+	}
+}

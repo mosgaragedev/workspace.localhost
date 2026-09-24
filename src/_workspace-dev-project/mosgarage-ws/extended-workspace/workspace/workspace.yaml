@@ -1,0 +1,38 @@
+---
+# mandatory
+name: Extended workspace
+doc_url: https://docs.alnoda.org/
+repository: https://github.com/bluxmit/alnoda-workspaces/
+author: bluxmit
+version: 5.0
+description: |
+  Versatile, containerized environment equipped with many tools including IDE, CLI utilities, desktop app, file manager, and job scheduler. 
+  It's ready for diverse projects including software development, DevOps, analytics, and data engineering.
+  
+
+tags: task-scheduler, static-file-server
+
+# UI icons
+logo: extended-workspace-white.svg
+favicon: extended-workspace.svg
+
+# Homepage UI appearance
+styles:
+  colors:
+    light:
+      primary: "#2A2D2E"
+      accent: "#E77260"
+    dark:
+      primary: "#3C3C3C"
+      accent: "#E77260"
+      background: "#1E1E1E"
+      title: "#9CDCFE"
+      text: "#9CDCFE"
+      code_text: "#EAB676"
+      code_background: "#3C3C3C"
+  common_colors:
+    header: "#ffffff"
+    nav: "#eab676"
+
+
+

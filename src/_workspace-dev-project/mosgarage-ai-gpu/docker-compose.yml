@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  ai-gpu:
+    build: .
+    container_name: mosgarage-ai-gpu
+
+    devices:
+      - /dev/dri:/dev/dri   # 🔥 Intel GPU passthrough
+
+    group_add:
+      - video
+      - render
+
+    ports:
+      - "8888:8888"
+
+    volumes:
+      - ./:/workspace
+
+    tty: true

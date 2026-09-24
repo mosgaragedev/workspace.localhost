@@ -1,0 +1,94 @@
+---
+# mandatory
+name: Neovim workspace
+doc_url: https://docs.alnoda.org/
+repository: https://github.com/bluxmit/alnoda-workspaces/
+author: bluxmit
+version: 1.0
+description: |
+  Alnoda workspace with hyperextensible Vim-based text and code editor
+
+tags: web-ide, vim, neovim
+
+logo: vim-circle-white.svg
+favicon: vim-circle.svg
+
+styles:
+  font: JetBrains Mono  
+  colors:
+    light:
+      primary: "#282A36"
+      accent: "#EB71B9"
+      background: "#F5F7F7"
+      title: "#005F87"
+      code_text: "#282A36"
+      code_background: "#eab676"
+    dark:
+      primary: "#424450"
+      accent: "#45C368"
+      background: "#282A36"
+      title: "#F1FA8C"
+      text: "#BD93F9"
+      code_text: "#282A36"
+      code_background: "#eab676"
+  common_colors:
+    header: "#FFFFFF"
+    nav: "#eab676"
+
+cheatsheet:
+  Neoim: 
+    - cmd: i
+      description: enter insert mode, allows editing file
+    - cmd: Esc
+      description: exit insert mode, enter visual (command) mode
+    - cmd: mouse double click
+      description: toggle between insert/visual modes
+    - cmd: y
+      description: copy (yank) selected text
+    - cmd: p
+      description: paste copied (yank) text
+    - cmd: d
+      description: delete selected lines
+    - cmd: :te
+      description: open terminal
+    - cmd: u
+      description: undo all changes in the last insert mode 
+    - cmd: 2u
+      description: undo all changes done in 2 last insert modes 
+    - cmd: Ctrl + r
+      description: redo (undone changes)
+    - cmd: /
+      description: search in file 
+    - cmd: n
+      description: find next (when searching)
+    - cmd: N
+      description: find previous (when searching)
+    - cmd: :w
+      description: save file changes
+    - cmd: :wq
+      description: save and exit
+    - cmd: :q
+      description: close
+    - cmd: :q!
+      description: trash all changes
+    - cmd: m
+      description: create/delete/copy/move files and folders (if focused on file tree)
+    - cmd: u
+      description: set filetree to one level above (if focused on file tree)
+    - cmd: t
+      description: open the selected file in a new fullscreen tab (if focused on file tree)
+    - cmd: i
+      description: open the selected file in a horizontal split window (if focused on file tree)
+    - cmd: s
+      description: open the selected file in a vertical split window (if focused on file tree)
+    - cmd: I (Shift + i)
+      description: show hidden files (if focused on file tree)
+    - cmd: :G
+      description: manage Git repository
+
+links:
+  Developer help:
+    - url: "https://neovim.io/"
+      name: "Neovim"
+      description: "hyperextensible Vim-based text editor"
+    

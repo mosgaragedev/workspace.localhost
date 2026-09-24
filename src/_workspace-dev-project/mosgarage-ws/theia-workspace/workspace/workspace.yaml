@@ -1,0 +1,15 @@
+---
+name: Theia workspace
+doc_url: https://docs.alnoda.org/
+repository: https://github.com/bluxmit/alnoda-workspaces/
+author: bluxmit
+version: 5.0
+description: |
+  General-purpose portable containerized development environment with Theia IDE
+
+tags: ide, theia, vscode
+
+# UI icons
+logo: theia-circle-white.svg
+favicon: theia-circle.svg
+

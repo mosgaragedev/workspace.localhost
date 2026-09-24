@@ -1,0 +1,80 @@
+{
+  "name": ".Mosgarage-Base-Devcontainer",
+  "image": "ghcr.io/open-cloud-dev/devcontainers:full",
+  "features": {
+    "ghcr.io/devcontainers/features/go:1": {},
+    "ghcr.io/meaningful-ooo/devcontainer-features/homebrew:2": {},
+    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {},
+    "ghcr.io/devcontainers-contrib/features/kubectx-kubens:1": {},
+    "ghcr.io/rio/features/k9s:1": {},
+    "ghcr.io/devcontainers/features/nix:1": {},
+    "ghcr.io/devcontainers/features/node:1": {},
+    "ghcr.io/devcontainers-contrib/features/pre-commit:2": {},
+    "ghcr.io/devcontainers/features/python:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "version": "2"
+    },
+    "ghcr.io/devcontainers/features/powershell:1": {
+      "version": "latest"
+    },
+    "ghcr.io/azure/azure-dev/azd:0": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/common-utils:2": {},
+    "ghcr.io/devcontainers/features/dotnet:2": {
+      "version": "none",
+      "dotnetRuntimeVersions": "10.0",
+      "aspNetCoreRuntimeVersions": "10.0"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-kubernetes-tools.vscode-kubernetes-tools",
+        "GitHub.copilot",
+        "GitHub.vscode-github-actions",
+        "ms-dotnettools.csdevkit",
+        "ms-vscode.vscode-node-azure-pack",
+        "xdebug.php-debug",
+        "bmewburn.vscode-intelephense-client",
+        "eamodio.gitlens",
+        "donjayamanne.githistory",
+        "codeium.codeium",
+        "ms-python.python",
+        "esbenp.prettier-vscode",
+        "golf1052.code-sync"
+      ]
+    }
+  },
+  "forwardPorts": [
+    50080,
+    50050,
+	50010
+  },
+  "postCreateCommand": {
+    "helm-completion": "helm completion bash | sudo tee -a /etc/bash_completion.d/helm > /dev/null",
+    "pre-commit": "pre-commit install --install-hooks -t pre-commit -t commit-msg || true",
+    "postCreateCommand": "dotnet new install Aspire.ProjectTemplates && cd ./SampleApp && dotnet restore",
+    "hostRequirements": {
+      "memory": "8gb",
+      "cpus": 4
+    },
+    "remoteEnv": {
+      "DOTNET_MULTILEVEL_LOOKUP": "0",
+      "TARGET": "net10.0"
+    },
+    "portsAttributes": {
+      "50080": {
+        "label": "API",
+        "onAutoForward": "notify"
+	"50010": {
+        "label": "API",
+        "onAutoForward": "notify"
+      },
+      "50050": {
+        "label": "APP",
+        "onAutoForward": "notify"
+      }
+    }
+  }

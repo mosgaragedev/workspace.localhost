@@ -1,0 +1,57 @@
+{
+    "remote.antigravityDevContainers.experimental.disableServerChecksum": true,
+    "workbench.colorTheme": "Office Theme (Excel)",
+    "chromiumide.metrics.showMessage": true,
+    "chromiumide.metrics.collectMetrics": true,
+    "docker.extension.enableComposeLanguageServer": true,
+    "editor.minimap.enabled": false,
+    "workbench.iconTheme": "vscode-icons",
+    "redhat.telemetry.enabled": true,
+    "python.languageServer": "Default",
+    "aws.cloudformation.telemetry.enabled": true,
+    "daSSHboard.hosts": {
+        "145.241.226.235": {
+            "folders": [
+                "/home/ubuntu"
+            ],
+            "color": "",
+            "icon": ""
+        },
+        "mosgarage.duckdns.org": {
+            "folders": [
+                "/home/ubuntu/"
+            ],
+            "color": "",
+            "icon": ""
+        },
+        "mosgarage": {
+            "folders": [
+                "/home/mosgarage"
+            ],
+            "color": "",
+            "icon": ""
+        },
+        "172.166.182.225": {
+            "folders": [
+                "/home/vpcuser"
+            ],
+            "color": "",
+            "icon": ""
+        },
+        "github.com": {
+            "folders": [
+                "/home/git"
+            ],
+            "color": "",
+            "icon": ""
+        },
+        "192.168.1.100": {
+            "folders": [
+                "/home/ubuntu/localhost"
+            ],
+            "color": "",
+            "icon": ""
+        }
+    },
+    "vsicons.dontShowNewVersionMessage": true
+}

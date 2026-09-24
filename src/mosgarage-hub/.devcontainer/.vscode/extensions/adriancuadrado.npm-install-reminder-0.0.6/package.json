@@ -1,0 +1,46 @@
+{
+	"name": "npm-install-reminder",
+	"displayName": "npm-install-reminder",
+	"description": "Detects when a change is made in package.lock every time you pull or checkout another git branch, and reminds you to run npm install.",
+	"version": "0.0.6",
+	"author": {
+		"email": "adriancuadradochavarria97@gmail.com",
+		"name": "Adrian Cuadrado"
+	},
+	"homepage": "https://github.com/ProperlyExplained/npm-install-reminder",
+	"repository": {
+		"url": "https://github.com/ProperlyExplained/npm-install-reminder.git"
+	},
+	"publisher": "AdrianCuadrado",
+	"engines": {
+		"vscode": "^1.65.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onStartupFinished"
+	],
+	"main": "./extension.js",
+	"scripts": {
+		"lint": "eslint .",
+		"pretest": "npm run lint",
+		"test": "node ./test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.65.0",
+		"@types/glob": "^7.2.0",
+		"@types/mocha": "^9.1.0",
+		"@types/node": "14.x",
+		"eslint": "^8.9.0",
+		"glob": "^7.2.0",
+		"mocha": "^9.2.1",
+		"typescript": "^4.5.5",
+		"@vscode/test-electron": "^2.1.2"
+	},
+	"__metadata": {
+		"installedTimestamp": 1768036615836,
+		"targetPlatform": "undefined",
+		"size": 8035
+	}
+}

@@ -1,0 +1,5 @@
+[wsl2]
+swapFile=D:\\wsl-win.vhdx
+networkingMode=Mirrored
+[experimental]
+hostAddressLoopback=true

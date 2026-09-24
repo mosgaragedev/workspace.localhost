@@ -1,0 +1,84 @@
+{
+	"name": "yaml2json",
+	"displayName": "YAML to JSON",
+	"description": "Convert YAML from clipboard or current document/selection to JSON and vice versa.",
+	"version": "0.0.9",
+	"engines": {
+		"vscode": "^1.75.0"
+	},
+	"publisher": "ahebrank",
+	"categories": [
+		"Other"
+	],
+	"main": "./out/extension",
+	"contributes": {
+		"commands": [
+			{
+				"command": "yaml2json.document",
+				"title": "YAML to JSON: Convert selection or document"
+			},
+			{
+				"command": "yaml2json.clipboard",
+				"title": "YAML to JSON: Convert clipboard"
+			}
+		],
+		"configuration": {
+			"title": "yaml2json",
+			"properties": {
+				"yaml2json.yamlExpansionDepth": {
+					"type": "number",
+					"default": 6,
+					"minimum": 0,
+					"description": "Maximum depth of YAML expansion before using inline format"
+				},
+				"yaml2json.yamlIndentationSpaces": {
+					"type": "number",
+					"default": 4,
+					"minimum": 1,
+					"description": "Number of spaces to use for YAML indentation."
+				}
+			}
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"lint": "eslint"
+	},
+	"devDependencies": {
+		"@types/lodash.unescape": "^4.0.9",
+		"@types/mocha": "^5.2.7",
+		"@eslint/js": "^9.13.0",
+		"@stylistic/eslint-plugin": "^2.9.0",
+		"@types/node": "^20",
+		"@types/vscode": "^1.75.0",
+		"eslint": "^9.13.0",
+		"typescript": "^5.6.2",
+		"typescript-eslint": "^8.11.0"
+	},
+	"dependencies": {
+		"clipboardy": "^2",
+		"lodash.unescape": "^4.0.1",
+		"yamljs": "^0.3.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ahebrank/vscode-yaml2json"
+	},
+	"keywords": [
+		"vscode",
+		"yaml2json"
+	],
+	"author": "Andy Hebrank",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/ahebrank/vscode-yaml2json/issues"
+	},
+	"homepage": "https://github.com/ahebrank/vscode-yaml2json",
+	"__metadata": {
+		"installedTimestamp": 1768038038377,
+		"targetPlatform": "undefined",
+		"size": 2294607
+	}
+}

@@ -1,0 +1,33 @@
+---
+# mandatory
+name: Mkdocs workspace
+doc_url: https://mkdocs-magicspace.alnoda.org/tutorials/markdown/intro/
+repository: https://github.com/bluxmit/alnoda-workspaces/
+author: bluxmit
+version: 5.0
+description: |
+  Workspace for MkDocs projects. Build good-looking documentation websites with extended Markdown.  
+  Create docs from all your GitHub, GitLab and Bitbucket repositories, automate periodic builds.
+
+tags: markdown, mkdocs, mkdocs-material, markdown extensions
+
+# UI icons
+logo: alnoda-white.svg
+favicon: alnoda-dark.svg
+
+# (Homepage UI appearance)
+styles:
+  font: Lexend
+  colors:
+    light:
+      primary: "#316CE6"
+      accent: "#1040a1"
+      background: "#FFFFFF"
+      title: "#303030"
+    dark:
+      primary: "#316CE6"
+      accent: "#DF736A"
+      background: "#232834"
+      title: "#E3EAF2"
+      text: "#E3EAF2"
+

@@ -1,0 +1,125 @@
+[user]
+	email = 277760424+mosgaragedev@users.noreply.github.com
+	user = mosgaragedev
+	name = mosgaragedev
+	name = Mosgarage
+	name = Mosgarage
+	name = Mosgarage
+	name = Mosgarage
+	name = Mosgarage
+	name = Mosgarage
+[credential]
+	helper =
+	helper =
+	credentialStore = gpg
+[init]
+	defaultBranch = main
+
+[core]
+	# VS Code Integration: Opens VS Code for commit messages and waits for you to save/close
+	editor = code-insiders --wait
+
+	# WSL Performance Boosters: Drastically speeds up 'git status' and 'git diff'
+	fsmonitor = true
+	untrackedCache = true
+
+	# Line Endings: 'false' is best if your code lives inside the WSL ext4 filesystem.
+	# (Change to 'input' ONLY if you frequently edit these files in Windows editors via /mnt/c/)
+	autocrlf = true
+	safecrlf = warn
+
+[pull]
+	# Keeps your local commit history clean and linear by rebasing instead of merging
+	rebase = true
+
+[push]
+	# Automatically sets the upstream branch when you push a new branch
+	autoSetupRemote = true
+	default = current
+
+[fetch]
+	# Automatically removes remote-tracking branches that no longer exist on the remote
+	prune = true
+
+[merge]
+	# Enables 3-way merge conflicts. VS Code's merge editor handles this beautifully.
+	conflictstyle = zdiff3
+
+[diff]
+	colorMoved = default
+
+[rebase]
+	autoStash = true
+
+[safe]
+	# Fixes the "dubious ownership" error that plagues WSL/Windows users
+	directory = *
+
+[alias]
+	# --- Daily Drivers ---
+	st = status -sb
+	co = checkout
+	br = branch
+	cm = commit -m
+	cp = cherry-pick
+
+	# --- Visuals & Logs ---
+	# A beautiful, colorized graph log for offline history review
+	log = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	lg = log --oneline --graph --decorate --all
+
+	# --- Quick Fixes & Cleanup ---
+	# Amend the last commit without changing the message
+	amend = commit --amend --no-edit
+
+	# Undo the last commit, but keep the changes staged
+	undo = reset HEAD~1 --mixed
+
+	# Undo the last commit, and unstage the changes
+	unstage = reset HEAD --mixed
+
+	# Safely delete all local branches that have been merged into main
+	cleanup = !git branch --merged | grep -v '//*//|main//|master//|develop' | xargs -n 1 git branch -d
+
+	# --- Offline / Localhost Specials ---
+	# Create a single file containing the whole repo (great for offline transfer via USB)
+	bundle-create = !git bundle create ../repo-backup.bundle --all
+
+	# Clone from a local bundle file
+	bundle-clone = !git clone ../repo-backup.bundle
+
+	# Show a quick summary of what you've done today (offline reflection)
+	today = log --since=midnight --oneline --author=/"$(git config user.name)/"
+[safe]
+	directory = /D:/WSL
+	directory = /D:/WSL/Workspaces/home
+	directory = /D:/WSL/Workspaces/home/github-repo
+	directory = /D:/WSL/Workspaces/home/github-repo/mosgarageapp-directory
+	directory = /D:/WSL/Workspaces/dev
+	directory = /home/mosgarage/dev
+	directory = /srv/git
+	directory = /home/devops/workspace
+	directory = /home/ubuntu/workspace
+	directory = /home/ubuntu/workspace/.config
+	directory = /home/ubuntu/.ssh
+	directory = /home/ubuntu/workspace/.config/.env
+	directory = /home/ubuntu/.gitconfig
+	directory = /C:/Users/igewe/.gitconfig
+	directory = /D:/dev/localhost/Development/mosgarage/_unified-basedevcontainers
+	directory = /C:/Users/igewe/.mosgarage-universal
+	directory = /srv/git/ubuntu/basedevcontainer
+	directory = /srv/git/mosgarage/basedevcontainer
+	directory = /srv/git/mosgarage/universal-basedevdirectory
+	directory = /srv/git/ubuntu/universal-basedevdirectory
+	directory = /home/ubuntu/dev/.mosgarage
+	directory = /home/ubuntu/dev/.mosgarage/universal-basedevcontainer
+	directory = /home/ubuntu/dev/.mosgarage/basedevcontainer
+	directory = /home/mosgarage/dev/.mosgarage/basedevcontainer
+	directory = /home/mosgarage/dev/.mosgarage/universal-basedevcontainer
+	directory = C:\\Users\\igewe\\.xpipe\\storage
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

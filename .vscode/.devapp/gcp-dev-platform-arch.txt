@@ -1,0 +1,1207 @@
+# Google Cloud Development Environment Platform
+## Technical Architecture & Implementation Guide
+
+### Executive Summary
+An interactive, educational platform that automates Google Cloud development environment setup for students with learning difficulties. Focus on visual feedback, engagement, and hands-on learning through guided workflows.
+
+---
+
+## 1. Core Vision & User Experience
+
+### Target Audience
+- Students with learning difficulties who struggle in traditional classroom settings
+- Need interactive, visual, and rewarding experiences
+- Require simplified but powerful development tools
+
+### Key UX Principles
+- **Visual Progress**: Real-time visualization of what's being created
+- **Immediate Feedback**: Celebrate every successful step
+- **Gamification**: Progress bars, achievements, badges
+- **Safety Net**: Easy undo, clear explanations, no scary errors
+- **Autonomy**: Students control the pace and choices
+
+---
+
+## 2. Technical Architecture
+
+### 2.1 Technology Stack
+
+#### Web Application (MVP - Phase 1)
+```
+Frontend:
+- Next.js 14+ (App Router)
+- TypeScript
+- Tailwind CSS + shadcn/ui components
+- Framer Motion (animations for engagement)
+- React Query (data fetching)
+- Zustand (state management)
+
+Backend:
+- Next.js API Routes / tRPC
+- Node.js 20+
+- Prisma ORM
+- PostgreSQL (user data, progress tracking)
+- Redis (session management, caching)
+
+Authentication & Google Cloud:
+- NextAuth.js v5
+- Google Cloud SDK (@google-cloud/*)
+- Firebase Admin SDK
+- OAuth 2.0 with PKCE flow
+```
+
+#### Desktop Clients (Phase 2)
+```
+- Tauri (Rust + Web) - preferred over Electron for performance
+- Shared React frontend codebase
+- Native system integration
+- Auto-updater built-in
+```
+
+#### Android App (Phase 3)
+```
+- React Native or Flutter
+- Shared business logic
+- Native authentication flows
+```
+
+### 2.2 System Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    User Interface Layer                  │
+│  (Next.js Frontend - Interactive Dashboards & Wizards)   │
+└─────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────┐
+│                   Application Layer                      │
+│  ├─ Authentication Service (OAuth 2.0)                   │
+│  ├─ Provisioning Orchestrator                            │
+│  ├─ Progress Tracking & Gamification Engine              │
+│  ├─ Resource Configuration Manager                       │
+│  └─ Real-time Notification Service (WebSockets)          │
+└─────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────┐
+│              Google Cloud Integration Layer              │
+│  ├─ Compute Engine API                                   │
+│  ├─ Cloud Functions / Cloud Run                          │
+│  ├─ Firebase (Auth, Firestore, Hosting)                  │
+│  ├─ Cloud Storage                                         │
+│  ├─ Secret Manager                                        │
+│  ├─ IAM & Service Accounts                               │
+│  └─ Cloud Build / Artifact Registry                      │
+└─────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────┐
+│                    Data Persistence                      │
+│  ├─ PostgreSQL (User data, configurations, progress)     │
+│  ├─ Redis (Sessions, real-time updates)                  │
+│  └─ Cloud Storage (Logs, backups, templates)             │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 3. Core Features & User Flows
+
+### 3.1 Onboarding Flow (First-Time Setup)
+
+```
+Step 1: Welcome & Goal Setting
+├─ "What do you want to build today?"
+├─ Visual cards: Web App | Mobile App | Data Analysis | AI Project
+└─ Sets context for environment configuration
+
+Step 2: Google Cloud Authentication
+├─ One-click "Connect to Google Cloud"
+├─ OAuth popup with clear permissions explanation
+├─ Visual confirmation: "✓ Connected as [email]"
+└─ Store refresh token securely
+
+Step 3: Project Creation Wizard
+├─ "Let's create your playground!"
+├─ Auto-generate or choose project name
+├─ Real-time progress visualization:
+│   ├─ 🔨 Creating your project...
+│   ├─ 🔑 Setting up security...
+│   ├─ 💾 Preparing storage...
+│   └─ ✅ Your playground is ready!
+└─ Confetti animation on success
+
+Step 4: Environment Customization
+├─ "Choose your superpowers"
+├─ Toggle cards for services:
+│   ├─ VS Code in Browser (Code-server)
+│   ├─ Firebase Tools
+│   ├─ Cloud Functions
+│   ├─ Cloud Storage
+│   └─ [More services...]
+├─ Visual impact preview for each choice
+└─ Install selected services with progress bars
+
+Step 5: Launch!
+├─ "🚀 Everything is ready!"
+├─ Big "Open My Dev Environment" button
+├─ Achievement unlocked: "First Setup Complete" 🏆
+└─ Quick tutorial overlay on first launch
+```
+
+### 3.2 Main Dashboard Experience
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  👋 Welcome back, [Name]!                    [Profile ▼] │
+│                                                           │
+│  🎯 Your Active Projects                                 │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │
+│  │ Web App Pro  │  │ ML Experiment│  │ + New Project│   │
+│  │ ────────────│  │ ────────────│  │              │   │
+│  │ 🟢 Running   │  │ ⏸️  Paused   │  │              │   │
+│  │ 2h 34m       │  │ Last: 2d ago │  │              │   │
+│  │ [OPEN IDE]   │  │ [RESUME]     │  │              │   │
+│  └──────────────┘  └──────────────┘  └──────────────┘   │
+│                                                           │
+│  📊 Your Learning Journey                                │
+│  ████████████░░░░░░░░ 67% Complete                       │
+│  🏆 12 Achievements | ⭐ 340 Points                       │
+│                                                           │
+│  🔧 Quick Actions                                         │
+│  • Deploy to Firebase    • Add Cloud Function             │
+│  • Create Database       • Invite Teammate                │
+└─────────────────────────────────────────────────────────┘
+```
+
+### 3.3 Interactive IDE Launch
+
+When student clicks "Open IDE":
+1. Real-time status updates via WebSocket
+2. Visual stages: "Waking up your environment... Starting VS Code... Almost there!"
+3. Opens in new tab to cloud-based VS Code (code-server)
+4. Pre-configured with extensions, themes, and sample projects
+5. Integrated terminal with helpful aliases and commands
+
+---
+
+## 4. Google Cloud Integration Details
+
+### 4.1 Authentication Flow
+
+```javascript
+// Secure OAuth 2.0 Implementation
+const authFlow = {
+  // Step 1: Initial user login
+  initiateOAuth: async () => {
+    const authUrl = oauth2Client.generateAuthUrl({
+      access_type: 'offline',
+      scope: [
+        'https://www.googleapis.com/auth/cloud-platform',
+        'https://www.googleapis.com/auth/firebase',
+        'https://www.googleapis.com/auth/compute',
+      ],
+      prompt: 'consent', // Force to get refresh token
+    });
+    // Redirect user to Google consent screen
+  },
+  
+  // Step 2: Handle callback
+  handleCallback: async (code) => {
+    const { tokens } = await oauth2Client.getToken(code);
+    // Store refresh_token encrypted in database
+    // Store access_token in Redis with expiry
+    return tokens;
+  },
+  
+  // Step 3: Automatic token refresh
+  ensureValidToken: async (userId) => {
+    // Check Redis cache first
+    // If expired, use refresh token from DB
+    // Update Redis cache
+  }
+};
+```
+
+### 4.2 Resource Provisioning Strategy
+
+```javascript
+// Orchestrated Provisioning with Progress Updates
+class ProvisioningOrchestrator {
+  async provisionDevEnvironment(userId, config) {
+    const steps = [
+      { name: 'Create GCP Project', weight: 15 },
+      { name: 'Enable APIs', weight: 10 },
+      { name: 'Setup IAM & Service Accounts', weight: 15 },
+      { name: 'Deploy Cloud Run (VS Code)', weight: 25 },
+      { name: 'Configure Firebase', weight: 20 },
+      { name: 'Create Storage Buckets', weight: 10 },
+      { name: 'Finalize & Test', weight: 5 },
+    ];
+    
+    let totalProgress = 0;
+    
+    for (const step of steps) {
+      await this.emitProgress(userId, {
+        step: step.name,
+        progress: totalProgress,
+        status: 'in_progress'
+      });
+      
+      await this.executeStep(step, config);
+      totalProgress += step.weight;
+      
+      await this.emitProgress(userId, {
+        step: step.name,
+        progress: totalProgress,
+        status: 'complete'
+      });
+    }
+    
+    // Celebration event
+    await this.emitProgress(userId, {
+      step: 'Complete',
+      progress: 100,
+      status: 'success',
+      achievementUnlocked: 'Environment Master'
+    });
+  }
+}
+```
+
+### 4.3 Services Configuration
+
+```yaml
+# Default Environment Template
+services:
+  code_server:
+    type: cloud_run
+    image: codercom/code-server:latest
+    cpu: 1
+    memory: 2Gi
+    min_instances: 0
+    max_instances: 1
+    authentication: iap  # Identity-Aware Proxy
+    extensions:
+      - ms-python.python
+      - dbaeumer.vscode-eslint
+      - esbenp.prettier-vscode
+      - firebase.firebase-vscode
+    
+  firebase:
+    enabled: true
+    features:
+      - authentication
+      - firestore
+      - hosting
+      - functions
+    
+  cloud_storage:
+    buckets:
+      - name: user-files-{userId}
+        location: us-central1
+        storage_class: STANDARD
+      
+  cloud_functions:
+    runtime: nodejs20
+    region: us-central1
+    
+  compute_engine:
+    optional: true
+    machine_type: e2-micro  # Free tier
+```
+
+---
+
+## 5. Database Schema
+
+```sql
+-- Core Tables
+
+CREATE TABLE users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email VARCHAR(255) UNIQUE NOT NULL,
+  name VARCHAR(255),
+  google_id VARCHAR(255) UNIQUE,
+  refresh_token_encrypted TEXT,
+  created_at TIMESTAMP DEFAULT NOW(),
+  last_login TIMESTAMP,
+  
+  -- Gamification
+  total_points INTEGER DEFAULT 0,
+  level INTEGER DEFAULT 1,
+  
+  -- Preferences
+  preferences JSONB DEFAULT '{}'
+);
+
+CREATE TABLE projects (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  name VARCHAR(255) NOT NULL,
+  gcp_project_id VARCHAR(255) UNIQUE,
+  status VARCHAR(50) DEFAULT 'provisioning',
+  
+  -- Configuration
+  config JSONB NOT NULL,
+  enabled_services TEXT[],
+  
+  -- Resources
+  ide_url TEXT,
+  firebase_config JSONB,
+  
+  created_at TIMESTAMP DEFAULT NOW(),
+  last_accessed TIMESTAMP,
+  provisioned_at TIMESTAMP
+);
+
+CREATE TABLE achievements (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  achievement_type VARCHAR(100) NOT NULL,
+  earned_at TIMESTAMP DEFAULT NOW(),
+  metadata JSONB,
+  
+  UNIQUE(user_id, achievement_type)
+);
+
+CREATE TABLE provisioning_logs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  project_id UUID REFERENCES projects(id) ON DELETE CASCADE,
+  step VARCHAR(255) NOT NULL,
+  status VARCHAR(50) NOT NULL,
+  progress INTEGER,
+  message TEXT,
+  error JSONB,
+  timestamp TIMESTAMP DEFAULT NOW()
+);
+
+-- Indexes
+CREATE INDEX idx_projects_user_id ON projects(user_id);
+CREATE INDEX idx_projects_status ON projects(status);
+CREATE INDEX idx_achievements_user_id ON achievements(user_id);
+```
+
+---
+
+## 6. Security Considerations
+
+### 6.1 Token Management
+- Refresh tokens encrypted at rest (AES-256)
+- Access tokens only in Redis, never in database
+- Short-lived access tokens (1 hour max)
+- Secure token rotation
+
+### 6.2 Resource Isolation
+- Each student gets separate GCP project
+- IAM policies restrict cross-project access
+- Service accounts with least-privilege permissions
+- Resource quotas to prevent abuse
+
+### 6.3 Cost Control
+```javascript
+// Automatic Budget Alerts & Limits
+const budgetConfig = {
+  perUserMonthly: 10, // $10 USD
+  actions: [
+    { threshold: 0.5, action: 'notify_user' },
+    { threshold: 0.8, action: 'notify_admin' },
+    { threshold: 1.0, action: 'pause_resources' }
+  ]
+};
+
+// Idle Resource Cleanup
+const autoShutdown = {
+  idleThreshold: '2 hours',
+  warningBefore: '10 minutes',
+  gracefulShutdown: true
+};
+```
+
+---
+
+## 7. Deployment Strategy
+
+### Phase 1: MVP Web App (Weeks 1-4)
+
+**Week 1-2: Foundation**
+- Setup Next.js project with TypeScript
+- Implement Google OAuth flow
+- Database schema & Prisma setup
+- Basic dashboard UI
+
+**Week 3: Core Provisioning**
+- GCP SDK integration
+- Project creation automation
+- VS Code (code-server) deployment
+- Real-time progress WebSockets
+
+**Week 4: Polish & Launch**
+- Gamification features
+- Error handling & recovery
+- Documentation
+- Beta testing with small group
+
+### Phase 2: Desktop Clients (Weeks 5-8)
+- Tauri setup for Linux/Windows
+- Shared component library
+- Native notifications
+- Auto-update mechanism
+
+### Phase 3: Android App (Weeks 9-12)
+- React Native or Flutter
+- Mobile-optimized UI
+- Push notifications
+- App store submission
+
+---
+
+## 8. Development Roadmap
+
+```
+Sprint 1 (Week 1-2): 🏗️ Foundation
+├─ Project scaffolding
+├─ Authentication flow
+├─ Database setup
+└─ Basic UI components
+
+Sprint 2 (Week 3-4): ⚙️ Core Features
+├─ GCP project creation
+├─ Code-server deployment
+├─ Real-time progress tracking
+└─ Dashboard MVP
+
+Sprint 3 (Week 5-6): 🎮 Engagement
+├─ Gamification system
+├─ Achievement engine
+├─ Visual polish
+└─ User onboarding flow
+
+Sprint 4 (Week 7-8): 🚀 Production Ready
+├─ Error handling
+├─ Cost controls
+├─ Documentation
+└─ Beta launch
+
+Future Sprints:
+├─ Desktop clients (Tauri)
+├─ Mobile app (React Native/Flutter)
+├─ Advanced features (team collaboration)
+└─ Marketplace for templates
+```
+
+---
+
+## 9. Tech Stack Quick Start
+
+### Installation Commands
+
+```bash
+# Initialize Next.js project
+npx create-next-app@latest gcp-dev-platform \
+  --typescript --tailwind --app --src-dir
+
+cd gcp-dev-platform
+
+# Install core dependencies
+npm install \
+  @google-cloud/compute \
+  @google-cloud/resource-manager \
+  @google-cloud/iam \
+  firebase-admin \
+  next-auth \
+  @prisma/client \
+  prisma \
+  zod \
+  zustand \
+  @tanstack/react-query \
+  framer-motion \
+  socket.io socket.io-client
+
+# Development tools
+npm install -D \
+  @types/node \
+  eslint \
+  prettier
+
+# Initialize Prisma
+npx prisma init
+
+# Setup Google Cloud SDK
+gcloud auth application-default login
+gcloud config set project YOUR_PROJECT_ID
+```
+
+### Environment Variables
+
+```bash
+# .env.local
+DATABASE_URL="postgresql://user:password@localhost:5432/gcp_dev_platform"
+REDIS_URL="redis://localhost:6379"
+
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="generate-with-openssl-rand-base64-32"
+
+GOOGLE_CLIENT_ID="your-client-id.apps.googleusercontent.com"
+GOOGLE_CLIENT_SECRET="your-client-secret"
+
+GCP_PROJECT_ID="your-admin-project-id"
+GCP_SERVICE_ACCOUNT_KEY='{"type":"service_account",...}'
+
+ENCRYPTION_KEY="generate-with-openssl-rand-base64-32"
+```
+
+---
+
+## 10. Sample Code Structure
+
+```
+gcp-dev-platform/
+├── src/
+│   ├── app/
+│   │   ├── (auth)/
+│   │   │   ├── login/
+│   │   │   └── callback/
+│   │   ├── (dashboard)/
+│   │   │   ├── projects/
+│   │   │   ├── achievements/
+│   │   │   └── settings/
+│   │   ├── api/
+│   │   │   ├── auth/
+│   │   │   ├── provision/
+│   │   │   └── projects/
+│   │   └── layout.tsx
+│   ├── components/
+│   │   ├── ui/ (shadcn components)
+│   │   ├── dashboard/
+│   │   ├── provisioning/
+│   │   └── gamification/
+│   ├── lib/
+│   │   ├── google-cloud/
+│   │   │   ├── auth.ts
+│   │   │   ├── provisioner.ts
+│   │   │   ├── compute.ts
+│   │   │   └── firebase.ts
+│   │   ├── db/
+│   │   │   ├── prisma.ts
+│   │   │   └── redis.ts
+│   │   ├── gamification/
+│   │   │   └── achievements.ts
+│   │   └── utils/
+│   ├── hooks/
+│   ├── types/
+│   └── store/
+├── prisma/
+│   ├── schema.prisma
+│   └── migrations/
+├── public/
+└── package.json
+```
+
+---
+
+## 11. Success Metrics
+
+### Technical Metrics
+- Provisioning success rate: >95%
+- Average setup time: <5 minutes
+- IDE load time: <10 seconds
+- Cost per user per month: <$5
+
+### User Engagement Metrics
+- Return rate after first use: >60%
+- Average session duration: >20 minutes
+- Projects created per user: >3
+- Achievement completion rate: >40%
+
+---
+
+## 12. Next Steps
+
+1. **Immediate**: Setup Google Cloud project with billing
+2. **Week 1**: Build authentication & database foundation
+3. **Week 2**: Implement core provisioning logic
+4. **Week 3**: Create interactive dashboard
+5. **Week 4**: Beta testing with target audience
+
+---
+
+## 13. GitHub Project Board Setup
+
+### Repository Structure
+```
+gcp-dev-platform/
+├── .github/
+│   ├── workflows/
+│   │   ├── ci.yml
+│   │   ├── deploy-preview.yml
+│   │   └── deploy-production.yml
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── bug_report.md
+│   │   ├── feature_request.md
+│   │   └── user_story.md
+│   └── PULL_REQUEST_TEMPLATE.md
+├── docs/
+│   ├── ARCHITECTURE.md
+│   ├── DEPLOYMENT.md
+│   ├── CONTRIBUTING.md
+│   └── API.md
+└── PROJECT_ROADMAP.md
+```
+
+### GitHub Issues & Milestones
+
+#### Milestone 1: Foundation (Weeks 1-2)
+**Target Date**: 2 weeks from start
+
+**Epic Issues:**
+
+1. **[SETUP] Project Initialization & DevOps**
+   - Labels: `setup`, `infrastructure`
+   - Tasks:
+     - [ ] Initialize Next.js project with TypeScript
+     - [ ] Setup ESLint, Prettier, Husky
+     - [ ] Configure GitHub Actions CI/CD
+     - [ ] Setup staging & production environments
+     - [ ] Create Docker containers for local development
+   - Assignee: DevOps Lead
+   - Story Points: 8
+
+2. **[AUTH] Google OAuth 2.0 Implementation**
+   - Labels: `authentication`, `backend`
+   - Tasks:
+     - [ ] Setup NextAuth.js configuration
+     - [ ] Implement OAuth flow with Google
+     - [ ] Create token refresh mechanism
+     - [ ] Add token encryption utilities
+     - [ ] Write authentication middleware
+     - [ ] Unit tests for auth flow
+   - Assignee: Backend Developer
+   - Story Points: 13
+
+3. **[DATABASE] Schema Design & Setup**
+   - Labels: `database`, `backend`
+   - Tasks:
+     - [ ] Design Prisma schema (users, projects, achievements)
+     - [ ] Setup PostgreSQL database
+     - [ ] Configure Redis for sessions
+     - [ ] Create database migration scripts
+     - [ ] Seed development data
+     - [ ] Write database access layer
+   - Assignee: Backend Developer
+   - Story Points: 8
+
+4. **[UI] Design System & Core Components**
+   - Labels: `frontend`, `design`
+   - Tasks:
+     - [ ] Setup Tailwind CSS & shadcn/ui
+     - [ ] Create design tokens (colors, spacing, typography)
+     - [ ] Build core UI components (Button, Card, Modal)
+     - [ ] Implement responsive layout system
+     - [ ] Create Storybook documentation
+   - Assignee: Frontend Developer
+   - Story Points: 13
+
+#### Milestone 2: Core Features (Weeks 3-4)
+**Target Date**: 4 weeks from start
+
+5. **[GCP] Google Cloud Integration**
+   - Labels: `backend`, `gcp`, `critical`
+   - Tasks:
+     - [ ] Setup GCP SDK and service accounts
+     - [ ] Implement project creation API
+     - [ ] Enable required APIs automatically
+     - [ ] Configure IAM roles and permissions
+     - [ ] Create error handling for GCP operations
+     - [ ] Write integration tests
+   - Assignee: Backend Developer
+   - Story Points: 21
+
+6. **[PROVISION] Resource Provisioning Engine**
+   - Labels: `backend`, `gcp`, `critical`
+   - Tasks:
+     - [ ] Design provisioning orchestrator
+     - [ ] Implement Cloud Run deployment for code-server
+     - [ ] Setup Firebase project initialization
+     - [ ] Create Cloud Storage buckets
+     - [ ] Build rollback mechanism for failures
+     - [ ] Add provisioning status tracking
+   - Assignee: Backend Developer
+   - Story Points: 21
+
+7. **[REALTIME] WebSocket Progress Tracking**
+   - Labels: `backend`, `frontend`, `realtime`
+   - Tasks:
+     - [ ] Setup Socket.io server
+     - [ ] Implement progress event emitters
+     - [ ] Create client-side WebSocket hooks
+     - [ ] Build real-time progress UI component
+     - [ ] Add reconnection logic
+     - [ ] Test with slow connections
+   - Assignee: Full Stack Developer
+   - Story Points: 13
+
+8. **[DASHBOARD] Main Dashboard UI**
+   - Labels: `frontend`, `critical`
+   - Tasks:
+     - [ ] Design dashboard layout (Figma)
+     - [ ] Build project cards component
+     - [ ] Implement project list with filtering
+     - [ ] Create "New Project" wizard
+     - [ ] Add loading states and skeletons
+     - [ ] Responsive design for mobile
+   - Assignee: Frontend Developer
+   - Story Points: 13
+
+#### Milestone 3: Engagement & Polish (Weeks 5-6)
+**Target Date**: 6 weeks from start
+
+9. **[GAMIFICATION] Achievement System**
+   - Labels: `backend`, `frontend`, `gamification`
+   - Tasks:
+     - [ ] Design achievement types and criteria
+     - [ ] Implement achievement detection logic
+     - [ ] Create achievement unlock animations
+     - [ ] Build points and leveling system
+     - [ ] Design achievement showcase UI
+     - [ ] Add achievement notifications
+   - Assignee: Full Stack Developer
+   - Story Points: 13
+
+10. **[ONBOARDING] User Onboarding Flow**
+    - Labels: `frontend`, `ux`
+    - Tasks:
+      - [ ] Design multi-step onboarding wizard
+      - [ ] Implement goal selection UI
+      - [ ] Create service selection cards
+      - [ ] Build progress visualization
+      - [ ] Add celebration animations (confetti)
+      - [ ] Write onboarding copy and tooltips
+    - Assignee: Frontend Developer
+    - Story Points: 13
+
+11. **[IDE] Code-Server Configuration**
+    - Labels: `backend`, `devex`
+    - Tasks:
+      - [ ] Create custom code-server Docker image
+      - [ ] Pre-install VS Code extensions
+      - [ ] Configure default themes and settings
+      - [ ] Setup sample project templates
+      - [ ] Implement auto-save and sync
+      - [ ] Add integrated terminal aliases
+    - Assignee: DevOps Lead
+    - Story Points: 13
+
+#### Milestone 4: Production Ready (Weeks 7-8)
+**Target Date**: 8 weeks from start (MVP Launch)
+
+12. **[SECURITY] Security Hardening**
+    - Labels: `security`, `backend`, `critical`
+    - Tasks:
+      - [ ] Implement rate limiting
+      - [ ] Add CSRF protection
+      - [ ] Setup content security policy
+      - [ ] Audit dependencies for vulnerabilities
+      - [ ] Implement token encryption at rest
+      - [ ] Add security headers
+      - [ ] Penetration testing
+    - Assignee: Backend Developer
+    - Story Points: 13
+
+13. **[COST] Cost Control & Monitoring**
+    - Labels: `backend`, `monitoring`
+    - Tasks:
+      - [ ] Implement budget alerts
+      - [ ] Create automatic resource cleanup
+      - [ ] Add usage quotas per user
+      - [ ] Build cost dashboard
+      - [ ] Setup idle resource detection
+      - [ ] Configure auto-shutdown policies
+    - Assignee: Backend Developer
+    - Story Points: 8
+
+14. **[DOCS] Documentation & Guides**
+    - Labels: `documentation`
+    - Tasks:
+      - [ ] Write deployment guide
+      - [ ] Create API documentation
+      - [ ] Write student user guide
+      - [ ] Create video tutorials
+      - [ ] Build troubleshooting guide
+      - [ ] Document architecture decisions
+    - Assignee: Technical Writer
+    - Story Points: 8
+
+15. **[TESTING] E2E Testing & QA**
+    - Labels: `testing`, `qa`
+    - Tasks:
+      - [ ] Setup Playwright/Cypress
+      - [ ] Write critical path E2E tests
+      - [ ] Create test data fixtures
+      - [ ] Manual QA test plan
+      - [ ] Performance testing
+      - [ ] Accessibility audit
+    - Assignee: QA Engineer
+    - Story Points: 13
+
+16. **[BETA] Beta Launch Preparation**
+    - Labels: `launch`, `critical`
+    - Tasks:
+      - [ ] Setup error monitoring (Sentry)
+      - [ ] Configure analytics (PostHog/Mixpanel)
+      - [ ] Create feedback collection form
+      - [ ] Prepare launch announcement
+      - [ ] Recruit beta testers (10-20 students)
+      - [ ] Setup support documentation
+    - Assignee: Product Manager
+    - Story Points: 8
+
+---
+
+## 14. Microsoft Planner Task Export
+
+### Bucket 1: Foundation 🏗️ (Weeks 1-2)
+
+| Task | Assigned To | Due Date | Priority | Checklist |
+|------|------------|----------|----------|-----------|
+| **Project Setup** | DevOps | Week 1 | High | Next.js init, CI/CD, Docker |
+| **Google OAuth Flow** | Backend Dev | Week 1 | High | NextAuth, token refresh, encryption |
+| **Database Schema** | Backend Dev | Week 2 | High | Prisma, PostgreSQL, Redis, migrations |
+| **Design System** | Frontend Dev | Week 2 | Medium | Tailwind, shadcn/ui, Storybook |
+
+### Bucket 2: Core Features ⚙️ (Weeks 3-4)
+
+| Task | Assigned To | Due Date | Priority | Checklist |
+|------|------------|----------|----------|-----------|
+| **GCP Integration** | Backend Dev | Week 3 | Critical | SDK setup, project creation, IAM |
+| **Provisioning Engine** | Backend Dev | Week 3-4 | Critical | Cloud Run, Firebase, Storage |
+| **WebSocket Progress** | Full Stack | Week 4 | High | Socket.io, events, UI updates |
+| **Dashboard UI** | Frontend Dev | Week 4 | High | Project cards, wizard, responsive |
+
+### Bucket 3: Engagement 🎮 (Weeks 5-6)
+
+| Task | Assigned To | Due Date | Priority | Checklist |
+|------|------------|----------|----------|-----------|
+| **Gamification** | Full Stack | Week 5 | Medium | Achievements, points, animations |
+| **Onboarding Flow** | Frontend Dev | Week 5 | High | Wizard, goal selection, celebrations |
+| **Code-Server Config** | DevOps | Week 6 | Medium | Custom image, extensions, templates |
+
+### Bucket 4: Launch 🚀 (Weeks 7-8)
+
+| Task | Assigned To | Due Date | Priority | Checklist |
+|------|------------|----------|----------|-----------|
+| **Security Hardening** | Backend Dev | Week 7 | Critical | Rate limiting, CSRF, audits |
+| **Cost Controls** | Backend Dev | Week 7 | High | Budget alerts, auto-cleanup, quotas |
+| **Documentation** | Tech Writer | Week 8 | Medium | Guides, API docs, videos |
+| **E2E Testing** | QA Engineer | Week 8 | High | Playwright, test coverage |
+| **Beta Launch** | Product Manager | Week 8 | Critical | Monitoring, analytics, beta testers |
+
+---
+
+## 15. Detailed Sprint Planning
+
+### Sprint 1 (Days 1-14): Foundation
+
+**Daily Standup Questions:**
+- What did you complete yesterday?
+- What will you work on today?
+- Any blockers?
+
+**Sprint Goals:**
+1. Working authentication flow
+2. Database operational
+3. Basic UI framework ready
+4. CI/CD pipeline functional
+
+**Definition of Done:**
+- Code reviewed and merged
+- Unit tests passing (>80% coverage)
+- Documentation updated
+- Deployed to staging environment
+
+### Sprint 2 (Days 15-28): Core MVP
+
+**Sprint Goals:**
+1. Users can create GCP projects
+2. Code-server deploys successfully
+3. Real-time progress visible
+4. Dashboard shows active projects
+
+**Demo Requirements:**
+- End-to-end provisioning demo
+- Show real-time progress updates
+- Demonstrate IDE launch
+- Present error handling
+
+### Sprint 3 (Days 29-42): Polish & Engagement
+
+**Sprint Goals:**
+1. Gamification system live
+2. Smooth onboarding experience
+3. Visual polish complete
+4. Performance optimized
+
+**User Acceptance Criteria:**
+- Students complete onboarding <5 minutes
+- Achievement unlocks feel rewarding
+- UI animations smooth on low-end devices
+- No confusing error messages
+
+### Sprint 4 (Days 43-56): Production Launch
+
+**Sprint Goals:**
+1. Security audit passed
+2. Documentation complete
+3. Beta testers onboarded
+4. Monitoring dashboards ready
+
+**Launch Checklist:**
+- [ ] All critical bugs resolved
+- [ ] Load testing completed (100 concurrent users)
+- [ ] Backup and recovery tested
+- [ ] Legal/privacy docs reviewed
+- [ ] Support channels established
+- [ ] Rollback plan documented
+
+---
+
+## 16. GitHub Project Automation
+
+### Workflow Automations
+
+```yaml
+# .github/workflows/project-automation.yml
+name: Project Board Automation
+
+on:
+  issues:
+    types: [opened, labeled, closed]
+  pull_request:
+    types: [opened, ready_for_review, closed]
+
+jobs:
+  automate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Move new issues to Backlog
+        if: github.event.action == 'opened' && github.event_name == 'issues'
+        uses: alex-page/github-project-automation-plus@v0.9.0
+        with:
+          project: GCP Dev Platform
+          column: Backlog
+          
+      - name: Move in-progress issues
+        if: contains(github.event.issue.labels.*.name, 'in-progress')
+        uses: alex-page/github-project-automation-plus@v0.9.0
+        with:
+          project: GCP Dev Platform
+          column: In Progress
+          
+      - name: Move to review when PR opened
+        if: github.event_name == 'pull_request' && github.event.action == 'ready_for_review'
+        uses: alex-page/github-project-automation-plus@v0.9.0
+        with:
+          project: GCP Dev Platform
+          column: Review
+          
+      - name: Move to done when closed
+        if: github.event.action == 'closed'
+        uses: alex-page/github-project-automation-plus@v0.9.0
+        with:
+          project: GCP Dev Platform
+          column: Done
+```
+
+### Issue Labels
+
+```
+Priority:
+- critical (red)
+- high (orange)
+- medium (yellow)
+- low (blue)
+
+Type:
+- bug (red)
+- feature (green)
+- enhancement (blue)
+- documentation (purple)
+- testing (yellow)
+
+Area:
+- frontend (lightblue)
+- backend (darkblue)
+- database (brown)
+- devops (gray)
+- design (pink)
+
+Status:
+- blocked (red)
+- in-progress (yellow)
+- ready-for-review (green)
+- needs-discussion (purple)
+```
+
+---
+
+## 17. Weekly Progress Tracking Template
+
+### Week 1 Report
+**Completed:**
+- ✅ Next.js project initialized
+- ✅ OAuth flow implemented
+- ✅ Database schema designed
+
+**In Progress:**
+- 🔄 CI/CD pipeline setup (80%)
+- 🔄 Core UI components (60%)
+
+**Blockers:**
+- ⚠️ Waiting for GCP billing account approval
+
+**Next Week:**
+- Begin GCP integration
+- Complete UI component library
+- Start provisioning engine
+
+**Metrics:**
+- Story points completed: 21/34
+- Velocity: 21 points/week
+- Code coverage: 78%
+
+---
+
+## 18. GitHub Repository Setup Commands
+
+```bash
+# Initialize Git repository
+git init
+git branch -M main
+
+# Create initial structure
+mkdir -p .github/workflows .github/ISSUE_TEMPLATE docs src
+
+# Create README
+cat > README.md << 'EOF'
+# GCP Development Environment Platform
+
+An interactive platform that automates Google Cloud development environment setup for students.
+
+## Quick Start
+\`\`\`bash
+npm install
+npm run dev
+\`\`\`
+
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for full setup instructions.
+
+## Project Status
+- 🏗️ **Phase**: Foundation (Week 1-2)
+- 📊 **Progress**: 0% → MVP Launch
+- 🎯 **Next Milestone**: Authentication & Database Setup
+
+[View Project Board](https://github.com/YOUR_ORG/gcp-dev-platform/projects/1)
+EOF
+
+# Create initial commit
+git add .
+git commit -m "Initial project structure"
+
+# Create GitHub repository (using GitHub CLI)
+gh repo create gcp-dev-platform --public --source=. --remote=origin
+
+# Push to GitHub
+git push -u origin main
+
+# Create project board
+gh project create "GCP Dev Platform" --owner YOUR_ORG
+
+# Create milestones
+gh milestone create "Foundation" --due-date 2026-05-09 --description "Weeks 1-2: Setup & Auth"
+gh milestone create "Core Features" --due-date 2026-05-23 --description "Weeks 3-4: GCP Integration"
+gh milestone create "Engagement" --due-date 2026-06-06 --description "Weeks 5-6: Gamification"
+gh milestone create "Launch" --due-date 2026-06-20 --description "Weeks 7-8: Production Ready"
+```
+
+---
+
+## 19. Microsoft Planner Import Data (CSV)
+
+```csv
+Title,Bucket,Assigned To,Start Date,Due Date,Priority,Checklist,Description
+"Initialize Next.js Project","Foundation",DevOps,2026-04-14,2026-04-18,High,"TypeScript setup,ESLint config,Prettier config","Setup Next.js 14+ with TypeScript and development tooling"
+"Implement Google OAuth","Foundation",Backend Dev,2026-04-14,2026-04-18,High,"NextAuth.js setup,Token refresh,Encryption","Build complete OAuth 2.0 authentication flow"
+"Design Database Schema","Foundation",Backend Dev,2026-04-18,2026-04-25,High,"Prisma schema,Migrations,Seeding","Create PostgreSQL schema for users, projects, achievements"
+"Build Design System","Foundation",Frontend Dev,2026-04-18,2026-04-25,Medium,"Tailwind setup,shadcn/ui,Storybook","Implement core UI components and design tokens"
+"GCP SDK Integration","Core Features",Backend Dev,2026-04-25,2026-05-02,Critical,"Service accounts,Project creation,API enabling","Integrate Google Cloud SDK and implement project creation"
+"Provisioning Engine","Core Features",Backend Dev,2026-04-25,2026-05-09,Critical,"Cloud Run,Firebase,Storage,Rollback","Build orchestrator for resource provisioning"
+"WebSocket Progress","Core Features",Full Stack Dev,2026-05-02,2026-05-09,High,"Socket.io server,Client hooks,UI component","Implement real-time progress tracking"
+"Dashboard UI","Core Features",Frontend Dev,2026-05-02,2026-05-09,High,"Project cards,Wizard,Responsive design","Build main dashboard with project management"
+"Gamification System","Engagement",Full Stack Dev,2026-05-09,2026-05-16,Medium,"Achievement engine,Points system,Animations","Create achievement and points tracking system"
+"Onboarding Flow","Engagement",Frontend Dev,2026-05-09,2026-05-16,High,"Multi-step wizard,Service selection,Celebrations","Design smooth first-time user experience"
+"Code-Server Setup","Engagement",DevOps,2026-05-16,2026-05-23,Medium,"Docker image,Extensions,Templates","Configure custom VS Code environment"
+"Security Hardening","Launch",Backend Dev,2026-05-23,2026-05-30,Critical,"Rate limiting,CSRF,Security headers,Audit","Implement security best practices"
+"Cost Controls","Launch",Backend Dev,2026-05-23,2026-05-30,High,"Budget alerts,Auto-cleanup,Quotas","Add cost monitoring and resource management"
+"Documentation","Launch",Tech Writer,2026-05-30,2026-06-06,Medium,"Deployment guide,API docs,User guide,Videos","Create comprehensive documentation"
+"E2E Testing","Launch",QA Engineer,2026-05-30,2026-06-06,High,"Playwright setup,Test suite,QA plan","Implement end-to-end testing"
+"Beta Launch Prep","Launch",Product Manager,2026-06-06,2026-06-13,Critical,"Monitoring,Analytics,Beta testers,Support","Prepare for beta launch with students"
+```
+
+**To import into Microsoft Planner:**
+1. Go to your Plan in Microsoft Planner
+2. Click "..." menu → "Export plan to Excel"
+3. Use the Excel template structure
+4. Copy the data above and format to match
+5. Import back into Planner
+
+---
+
+## 20. Project Tracking Dashboard Metrics
+
+### KPIs to Track Weekly
+
+**Development Velocity:**
+- Story points completed vs. planned
+- Sprint burndown rate
+- Code review turnaround time
+
+**Code Quality:**
+- Test coverage percentage
+- Number of open bugs
+- Technical debt ratio
+
+**User Metrics (Post-Launch):**
+- Successful onboardings
+- Average setup time
+- User retention rate
+- Cost per active user
+
+**Infrastructure:**
+- Deployment frequency
+- Mean time to recovery
+- API error rate
+- System uptime
+
+---
+
+## Resources & Documentation
+
+- [Google Cloud SDK for Node.js](https://cloud.google.com/nodejs/docs/reference)
+- [Next.js Documentation](https://nextjs.org/docs)
+- [NextAuth.js](https://next-auth.js.org)
+- [Prisma](https://www.prisma.io/docs)
+- [code-server](https://github.com/coder/code-server)
+- [Tauri](https://tauri.app)
+- [GitHub Projects](https://docs.github.com/en/issues/planning-and-tracking-with-projects)
+- [Microsoft Planner](https://support.microsoft.com/en-us/planner)
+
+---
+
+**Ready to build something amazing that empowers students! 🚀**
+
+**Next Actions:**
+1. Create GitHub repository using commands in Section 18
+2. Import milestones and issues from Section 13
+3. Setup Microsoft Planner using CSV in Section 19
+4. Begin Sprint 1 with foundation tasks

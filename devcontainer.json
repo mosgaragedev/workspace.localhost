@@ -1,0 +1,38 @@
+// .devcontainer/devcontainer.json
+{
+ "name": "Mosgarage-Antigravity-DevContainer",
+ "image": "ubuntu:26.04",
+ "runArgs": [
+  "--add-host=host.docker.internal:host-gateway"
+ ],
+ // Features to add to the dev container. More info: https://containers.dev/features.
+ "features": {
+  // curl & wget: required by antigravity
+  "ghcr.io/devcontainers-extra/features/curl-apt-get:1": {},
+  "ghcr.io/devcontainers-extra/features/wget-apt-get:1": {},
+  // git & fish: for convinience
+  "ghcr.io/devcontainers/features/git:1": {},
+  "ghcr.io/devcontainers/features/github-cli:1": {},
+  "ghcr.io/devcontainers-extra/features/fish-apt-get:1": {},
+  // node 22 & java: webapp coding and testing
+  "ghcr.io/devcontainers/features/node:1": {
+   "version": "22"
+  },
+  "ghcr.io/devcontainers/features/java:1": {
+   "version": "17"
+  },
+  // networking tools: socat to enable chrome bridge
+  "ghcr.io/devcontainers-extra/features/apt-get-packages:1": {
+   "packages": "socat, iputils-ping, net-tools, sudo"
+  }
+ },
+ "forwardPorts": [
+  3000,
+  9099,
+  8080,
+  5000,
+  4000,
+  4500
+ ],
+ "remoteUser": "root"
+}

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="img-src vscode-resource:">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>GitLab CI/CD</title>
+
+  <style>
+    body {
+      user-select: none;
+    }
+
+    button {
+      background-color: var(--vscode-button-background);
+      color: var(--vscode-button-foreground);
+      border: 0;
+      outline: 0;
+      border-radius: 2px;
+      padding: 8px 32px;
+      font-size: 14px;
+    }
+
+    button:not(:disabled) {
+      cursor: pointer;
+    }
+
+    button:hover:not(:disabled) {
+      background-color: var(--vscode-button-hoverBackground);
+    }
+
+    button:disabled {
+      opacity: 50%;
+    }
+
+    .outer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    .container p {
+      text-align: start;
+    }
+
+    .container button {
+      margin-top: 2em;
+    }
+
+    img {
+      max-width: 430px;
+    }
+  </style>
+
+  <script>
+    const vscode = acquireVsCodeApi();
+    window.addEventListener('message', event => {
+      if(event.data === "resetButton") {
+        document.getElementById("button").disabled = false;
+      }
+    });
+
+    function onButtonPress() {
+      document.getElementById("button").disabled = true;
+      vscode.postMessage({});
+    }
+  </script>
+</head>
+
+<body>
+  <div class="outer">
+    <div class="container">
+      {{image}}
+      <h1>
+        {{title}}
+      </h1>
+      <p>
+        {{description}}
+      </p>
+      {{button}}
+    </div>
+  </div>
+</body>
+
+</html>

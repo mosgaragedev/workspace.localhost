@@ -1,0 +1,114 @@
+{
+	"name": "markdown-wysiwyg",
+	"displayName": "Markdown Editor",
+	"description": "A powerful markdown WYSIWYG editor",
+	"version": "0.7.10",
+	"publisher": "adamerose",
+	"private": true,
+	"license": "GPLv3",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/adamerose/vscode-markdown-wysiwyg"
+	},
+	"engines": {
+		"vscode": "^1.32.0"
+	},
+	"categories": [
+		"Programming Languages",
+		"Formatters"
+	],
+	"tags": [
+		"markdown",
+		"editor",
+		"wysiwyg",
+		"ckeditor"
+	],
+	"activationEvents": [
+		"onCustomEditor:markdownEditor.customEditor",
+		"onCommand:markdownEditor.openCustomEditor"
+	],
+	"main": "./dist/extension",
+	"contributes": {
+		"customEditors": [
+			{
+				"viewType": "markdownEditor.customEditor",
+				"displayName": "Markdown WYSIWYG Editor",
+				"selector": [
+					{
+						"filenamePattern": "*.md"
+					}
+				],
+				"priority": "option"
+			}
+		],
+		"commands": [
+			{
+				"command": "markdownEditor.openCustomEditor",
+				"title": "Open WYSIWYG Editor",
+				"icon": "$(preview)"
+			},
+			{
+				"command": "markdownEditor.openDefaultEditor",
+				"title": "Open Default Editor",
+				"icon": "$(note)"
+			}
+		],
+		"menus": {
+			"editor/title": [
+				{
+					"command": "markdownEditor.openCustomEditor",
+					"group": "navigation@-1",
+					"when": "resourceLangId == markdown && !markdownEditor.editorIsActive"
+				},
+				{
+					"command": "markdownEditor.openDefaultEditor",
+					"group": "navigation@-1",
+					"when": "resourceLangId == markdown && markdownEditor.editorIsActive"
+				},
+				{
+					"command": "markdown.showPreviewToSide",
+					"group": "navigation@1",
+					"when": "resourceLangId == markdown && markdownEditor.editorIsActive"
+				}
+			]
+		},
+		"keybindings": [
+			{
+				"command": "markdownEditor.openCustomEditor",
+				"key": "ctrl+shift+e",
+				"mac": "cmd+shift+e",
+				"when": "resourceLangId == markdown && !markdownEditor.editorIsActive"
+			},
+			{
+				"command": "markdownEditor.openDefaultEditor",
+				"key": "ctrl+shift+e",
+				"mac": "cmd+shift+e",
+				"when": "resourceLangId == markdown && markdownEditor.editorIsActive"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "webpack --mode production",
+		"webpack": "webpack --mode development",
+		"webpack-dev": "webpack --mode development --watch",
+		"test-compile": "tsc -p ./",
+		"lint": "eslint . --ext .ts,.tsx"
+	},
+	"devDependencies": {
+		"@types/node": "^12.12.0",
+		"@types/vscode": "^1.32.0",
+		"@typescript-eslint/eslint-plugin": "^4.16.0",
+		"@typescript-eslint/parser": "^4.16.0",
+		"eslint": "^7.21.0",
+		"prettier": "^3.3.2",
+		"ts-loader": "^7.0.5",
+		"typescript": "^4.4.3",
+		"webpack": "^5.75.0",
+		"webpack-cli": "^5.0.1"
+	},
+	"__metadata": {
+		"installedTimestamp": 1768036664225,
+		"targetPlatform": "undefined",
+		"size": 44358068
+	}
+}

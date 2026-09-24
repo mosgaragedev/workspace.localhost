@@ -1,0 +1,30 @@
+FROM alnoda/codeserver-workspace:5.0
+
+RUN wrk install java==17
+RUN wrk install maven==3.8.8
+RUN wrk install gradle==7.4.2 
+
+# For convenience set environmental variables
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64/ \
+    M2_HOME=/home/abc/maven \
+    MAVEN_HOME=/home/abc/maven \
+    PATH="/home/abc/maven/bin:${PATH}" 
+
+ENV GRADLE_HOME=/home/abc/gradle/gradle-7.4.2 \
+    PATH="/home/abc/gradle/gradle-7.4.2/bin:${PATH}"
+
+# Install additional codeserver extensions 
+RUN echo "------------------------------------------------------ extensions" \
+    && code-server --install-extension redhat.java \
+    && code-server --install-extension vscjava.vscode-maven \
+    && code-server --install-extension zerodind.familiar-java-themes
+
+# Change default codeserver theme
+COPY --chown=abc:abc settings.json /home/abc/.local/share/code-server/User/settings.json
+
+# Copy example into the workspace
+COPY --chown=abc:abc example /home/abc/example
+
+# Gonfigure Alnoda workspace
+COPY --chown=abc:abc workspace /tmp/workspace
+RUN wrk build /tmp/workspace && rm -rf /tmp/workspace

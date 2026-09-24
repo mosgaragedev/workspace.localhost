@@ -1,0 +1,27 @@
+{
+	"name": "adi-theme-2",
+	"displayName": "Darkest Theme Ever",
+	"description": "This theme is just amazing,no weird colors,no nonsense",
+	"version": "0.0.1",
+	"publisher": "adi-projects",
+	"engines": {
+		"vscode": "^1.58.0"
+	},
+	"categories": [
+		"Themes"
+	],
+	"contributes": {
+		"themes": [
+			{
+				"label": "Darkest Theme",
+				"uiTheme": "vs-dark",
+				"path": "./themes/themes-color-theme.json"
+			}
+		]
+	},
+	"__metadata": {
+		"installedTimestamp": 1768036402781,
+		"targetPlatform": "undefined",
+		"size": 13201
+	}
+}

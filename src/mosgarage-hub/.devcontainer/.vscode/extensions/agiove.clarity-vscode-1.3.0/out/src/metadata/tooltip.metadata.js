@@ -1,0 +1,4 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.clrTooltipMeta = { "members": { "direction": [{ "__symbolic": "property", "decorators": [{ "__symbolic": "call", "expression": { "__symbolic": "reference", "module": "@angular/core", "name": "Input" }, "arguments": ["clrTooltipDirection"] }] }], "size": [{ "__symbolic": "property", "decorators": [{ "__symbolic": "call", "expression": { "__symbolic": "reference", "module": "@angular/core", "name": "Input" }, "arguments": ["clrTooltipSize"] }] }], "onMouseEnter": [{ "__symbolic": "method" }], "onMouseLeave": [{ "__symbolic": "method" }] } };
+//# sourceMappingURL=tooltip.metadata.js.map

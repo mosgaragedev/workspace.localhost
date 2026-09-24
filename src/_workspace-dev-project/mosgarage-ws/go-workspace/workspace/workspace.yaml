@@ -1,0 +1,34 @@
+---
+# mandatory
+name: Go workspace
+doc_url: https://github.com/bluxmit/alnoda-workspaces/tree/main/workspaces/go-workspace
+repository: https://github.com/bluxmit/alnoda-workspaces/
+author: bluxmit
+version: 5.0
+description: |
+  Browser-based portable containerized and completely isolated development environment for Go programming language projects.
+
+tags: go
+
+# UI icons
+logo: go-circle-white.svg
+favicon: go-circle.svg
+
+# Homepage UI appearance
+styles:
+  font: Open Sans # chose any from https://fonts.google.com/
+  colors:
+    light:
+      primary: "#007D9C"
+      accent: "#c9af06"
+      title: "#007D9C"
+      background: "#FFFFFF"
+    dark:
+      primary: "#007D9C"
+      accent: "#c9af06"
+      background: "#010d14"
+      title: "#79D4FD"
+      text: "#FFFFFF"
+  common_colors:
+    header: "#ffffff"
+    nav: "#eab676"

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>mosgarage — Platform Roadmap</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg:       #060a0f;
+    --surface:  #0d1520;
+    --border:   #1a2535;
+    --border2:  #243044;
+    --text:     #c8d8e8;
+    --muted:    #4a6080;
+    --bright:   #e8f4ff;
+
+    --ws-infra:     #0075ca;
+    --ws-daemon:    #c8b400;
+    --ws-console:   #e84040;
+    --ws-studio:    #18b060;
+    --ws-community: #2080e0;
+    --ws-academy:   #8040e0;
+    --ws-ecampus:   #c02828;
+    --ws-agent:     #00a0a0;
+    --ws-devenv:    #e0803a;
+    --ws-windows:   #60a0d8;
+    --ws-cicd:      #60b8d8;
+
+    --m1: #e84040;
+    --m2: #e07020;
+    --m3: #18b060;
+    --m4: #2080e0;
+    --m5: #8040e0;
+    --m6: #00c0a0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem;
+  }
+
+  /* ── Grid bg ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  /* ── Header ── */
+  .header {
+    display: flex; align-items: baseline; gap: 1.5rem;
+    margin-bottom: 3rem; position: relative;
+  }
+  .header h1 {
+    font-size: 2.5rem; font-weight: 800; color: var(--bright);
+    letter-spacing: -0.03em;
+  }
+  .header h1 span { color: var(--ws-console); }
+  .header .subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem; color: var(--muted);
+    border: 1px solid var(--border2);
+    padding: 0.25rem 0.75rem; border-radius: 4px;
+  }
+  .version-badge {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    color: var(--ws-agent);
+    padding: 0.3rem 0.8rem; border-radius: 4px;
+  }
+
+  /* ── Milestone strip ── */
+  .milestones {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+  }
+  .milestone {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    position: relative; overflow: hidden;
+  }
+  .milestone::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--accent);
+  }
+  .milestone .m-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; font-weight: 500;
+    color: var(--accent);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 0.4rem;
+  }
+  .milestone .m-title {
+    font-size: 0.78rem; font-weight: 700; color: var(--bright);
+    margin-bottom: 0.3rem; line-height: 1.3;
+  }
+  .milestone .m-due {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; color: var(--muted);
+  }
+  .milestone .m-count {
+    position: absolute; top: 0.75rem; right: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; color: var(--muted);
+  }
+
+  /* ── Workstream grid ── */
+  .workstreams {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1rem;
+  }
+
+  .ws {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .ws:hover { border-color: var(--border2); }
+
+  .ws-header {
+    display: flex; align-items: center; gap: 0.75rem;
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  .ws-header::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--ws-color);
+  }
+  .ws-icon { font-size: 1.1rem; }
+  .ws-name {
+    font-size: 0.85rem; font-weight: 700; color: var(--bright);
+    flex: 1;
+  }
+  .ws-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem; color: var(--muted);
+    background: var(--bg); border: 1px solid var(--border);
+    padding: 0.15rem 0.5rem; border-radius: 3px;
+  }
+
+  .ws-issues { padding: 0.5rem; }
+
+  .issue {
+    display: flex; align-items: flex-start; gap: 0.5rem;
+    padding: 0.45rem 0.5rem;
+    border-radius: 5px;
+    font-size: 0.78rem; color: var(--text);
+    line-height: 1.4;
+    transition: background 0.15s;
+    cursor: default;
+  }
+  .issue:hover { background: var(--bg); }
+
+  .issue-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--ws-color);
+    flex-shrink: 0; margin-top: 0.35rem;
+  }
+
+  .issue-text { flex: 1; }
+
+  .issue-meta {
+    display: flex; gap: 0.3rem; flex-shrink: 0; align-items: center;
+  }
+
+  .priority {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.58rem; padding: 0.1rem 0.35rem;
+    border-radius: 3px; font-weight: 500;
+  }
+  .p-critical { background: #e8404022; color: #e84040; border: 1px solid #e8404044; }
+  .p-high     { background: #e0702022; color: #e07020; border: 1px solid #e0702044; }
+  .p-medium   { background: #18b06022; color: #18b060; border: 1px solid #18b06044; }
+
+  .m-pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.58rem; padding: 0.1rem 0.35rem;
+    border-radius: 3px; border: 1px solid;
+  }
+
+  /* ── Stats bar ── */
+  .stats {
+    display: flex; gap: 2rem;
+    margin-bottom: 2rem; flex-wrap: wrap;
+  }
+  .stat {
+    display: flex; flex-direction: column; gap: 0.2rem;
+  }
+  .stat-val {
+    font-size: 2rem; font-weight: 800; color: var(--bright);
+    line-height: 1; font-variant-numeric: tabular-nums;
+  }
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .stat-divider {
+    width: 1px; background: var(--border); align-self: stretch;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>mos<span>garage</span></h1>
+  <div class="subtitle">platform roadmap</div>
+  <div class="version-badge">v1.0.0 · 11 workstreams · 6 milestones</div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-val">48</div><div class="stat-label">Total Issues</div></div>
+  <div class="stat-divider"></div>
+  <div class="stat"><div class="stat-val">11</div><div class="stat-label">Workstreams</div></div>
+  <div class="stat-divider"></div>
+  <div class="stat"><div class="stat-val">6</div><div class="stat-label">Milestones</div></div>
+  <div class="stat-divider"></div>
+  <div class="stat"><div class="stat-val">9</div><div class="stat-label">Critical</div></div>
+  <div class="stat-divider"></div>
+  <div class="stat"><div class="stat-val">Jan 2026</div><div class="stat-label">v1.0 GA Target</div></div>
+</div>
+
+<!-- Milestones -->
+<div class="milestones">
+  <div class="milestone" style="--accent: var(--m1)">
+    <div class="m-count">14 issues</div>
+    <div class="m-tag">v0.1</div>
+    <div class="m-title">Foundation</div>
+    <div class="m-due">Aug 2025</div>
+  </div>
+  <div class="milestone" style="--accent: var(--m2)">
+    <div class="m-count">10 issues</div>
+    <div class="m-tag">v0.2</div>
+    <div class="m-title">Console GA</div>
+    <div class="m-due">Sep 2025</div>
+  </div>
+  <div class="milestone" style="--accent: var(--m3)">
+    <div class="m-count">9 issues</div>
+    <div class="m-tag">v0.3</div>
+    <div class="m-title">Studio</div>
+    <div class="m-due">Oct 2025</div>
+  </div>
+  <div class="milestone" style="--accent: var(--m4)">
+    <div class="m-count">7 issues</div>
+    <div class="m-tag">v0.4</div>
+    <div class="m-title">Community + Academy</div>
+    <div class="m-due">Nov 2025</div>
+  </div>
+  <div class="milestone" style="--accent: var(--m5)">
+    <div class="m-count">6 issues</div>
+    <div class="m-tag">v0.5</div>
+    <div class="m-title">eCampus + Agent</div>
+    <div class="m-due">Dec 2025</div>
+  </div>
+  <div class="milestone" style="--accent: var(--m6)">
+    <div class="m-count">2 issues</div>
+    <div class="m-tag">v1.0</div>
+    <div class="m-title">Platform GA</div>
+    <div class="m-due">Jan 2026</div>
+  </div>
+</div>
+
+<!-- Workstreams -->
+<div class="workstreams">
+
+  <!-- WS-INFRA -->
+  <div class="ws" style="--ws-color: var(--ws-infra)">
+    <div class="ws-header">
+      <span class="ws-icon">🏗️</span>
+      <span class="ws-name">Infrastructure</span>
+      <span class="ws-id">WS-INFRA</span>
+    </div>
+    <div class="ws-issues">
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Traefik v3 — wildcard TLS + forward auth</div><div class="issue-meta"><span class="priority p-critical">critical</span><span class="m-pill" style="color:var(--m1);border-color:var(--m1)22">v0.1</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">PostgreSQL 16 — health checks + volumes</div><div class="issue-meta"><span class="priority p-critical">critical</span><span class="m-pill" style="color:var(--m1);border-color:var(--m1)22">v0.1</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">DNS wildcard records (*.mosgarage.xyz)</div><div class="issue-meta"><span class="priority p-critical">critical</span><span class="m-pill" style="color:var(--m1);border-color:var(--m1)22">v0.1</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Entra ID OIDC app registration</div><div class="issue-meta"><span class="priority p-critical">critical</span><span class="m-pill" style="color:var(--m1);border-color:var(--m1)22">v0.1</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">mosgarage.platform.yml schema</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m1);border-color:var(--m1)22">v0.1</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Docker networks + volume strategy</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m1);border-color:var(--m1)22">v0.1</span></div></div>
+    </div>
+  </div>
+
+  <!-- WS-DAEMON -->
+  <div class="ws" style="--ws-color: var(--ws-daemon)">
+    <div class="ws-header">
+      <span class="ws-icon">⚙️</span>
+      <span class="ws-name">mosgaraged</span>
+      <span class="ws-id">WS-DAEMON</span>
+    </div>
+    <div class="ws-issues">
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Service health polling loop</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m1);border-color:var(--m1)22">v0.1</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Unix socket IPC bus</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m1);border-color:var(--m1)22">v0.1</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">HTTP API (health / manifest / emit)</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m1);border-color:var(--m1)22">v0.1</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Multi-arch Docker image</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m1);border-color:var(--m1)22">v0.1</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Idle workspace detection</div><div class="issue-meta"><span class="priority p-medium">medium</span><span class="m-pill" style="color:var(--m1);border-color:var(--m1)22">v0.1</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Version tracking + update notifications</div><div class="issue-meta"><span class="priority p-medium">medium</span><span class="m-pill" style="color:var(--m2);border-color:var(--m2)22">v0.2</span></div></div>
+    </div>
+  </div>
+
+  <!-- WS-CONSOLE -->
+  <div class="ws" style="--ws-color: var(--ws-console)">
+    <div class="ws-header">
+      <span class="ws-icon">💻</span>
+      <span class="ws-name">Console</span>
+      <span class="ws-id">WS-CONSOLE</span>
+    </div>
+    <div class="ws-issues">
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">mosgarage/console image (code-server + DevPod + DinD)</div><div class="issue-meta"><span class="priority p-critical">critical</span><span class="m-pill" style="color:var(--m1);border-color:var(--m1)22">v0.1</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Rename codeserver → console on Docker Hub</div><div class="issue-meta"><span class="priority p-critical">critical</span><span class="m-pill" style="color:var(--m1);border-color:var(--m1)22">v0.1</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Workspace provisioning API</div><div class="issue-meta"><span class="priority p-critical">critical</span><span class="m-pill" style="color:var(--m1);border-color:var(--m1)22">v0.1</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Per-workspace Traefik dynamic routing</div><div class="issue-meta"><span class="priority p-critical">critical</span><span class="m-pill" style="color:var(--m1);border-color:var(--m1)22">v0.1</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Container startup automation + health gates</div><div class="issue-meta"><span class="priority p-critical">critical</span><span class="m-pill" style="color:var(--m1);border-color:var(--m1)22">v0.1</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Dashboard — web homepage</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m2);border-color:var(--m2)22">v0.2</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Visual Studio autoload — workspace picker</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m2);border-color:var(--m2)22">v0.2</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Multi-arch build (amd64 + arm64)</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m2);border-color:var(--m2)22">v0.2</span></div></div>
+    </div>
+  </div>
+
+  <!-- WS-STUDIO -->
+  <div class="ws" style="--ws-color: var(--ws-studio)">
+    <div class="ws-header">
+      <span class="ws-icon">🎨</span>
+      <span class="ws-name">Studio</span>
+      <span class="ws-id">WS-STUDIO</span>
+    </div>
+    <div class="ws-issues">
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Ghost blog — studio.mosgarage.xyz</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m3);border-color:var(--m3)22">v0.3</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Docusaurus docs (/docs)</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m3);border-color:var(--m3)22">v0.3</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">FlipStack — 3D interactive viewer</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m3);border-color:var(--m3)22">v0.3</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">FlipStack standalone Docker image</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m3);border-color:var(--m3)22">v0.3</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">FlipStack embed script distribution</div><div class="issue-meta"><span class="priority p-medium">medium</span><span class="m-pill" style="color:var(--m3);border-color:var(--m3)22">v0.3</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Content builder (AMP-style authoring)</div><div class="issue-meta"><span class="priority p-medium">medium</span><span class="m-pill" style="color:var(--m3);border-color:var(--m3)22">v0.3</span></div></div>
+    </div>
+  </div>
+
+  <!-- WS-COMMUNITY -->
+  <div class="ws" style="--ws-color: var(--ws-community)">
+    <div class="ws-header">
+      <span class="ws-icon">🤝</span>
+      <span class="ws-name">Community</span>
+      <span class="ws-id">WS-COMMUNITY</span>
+    </div>
+    <div class="ws-issues">
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Community portal scaffold (Next.js)</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m4);border-color:var(--m4)22">v0.4</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Discord OAuth bridge + guild sync</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m4);border-color:var(--m4)22">v0.4</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Developer profiles (Entra ID + GitHub)</div><div class="issue-meta"><span class="priority p-medium">medium</span><span class="m-pill" style="color:var(--m4);border-color:var(--m4)22">v0.4</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Project showcases — link to workspaces</div><div class="issue-meta"><span class="priority p-medium">medium</span><span class="m-pill" style="color:var(--m4);border-color:var(--m4)22">v0.4</span></div></div>
+    </div>
+  </div>
+
+  <!-- WS-ACADEMY -->
+  <div class="ws" style="--ws-color: var(--ws-academy)">
+    <div class="ws-header">
+      <span class="ws-icon">🎓</span>
+      <span class="ws-name">Academy</span>
+      <span class="ws-id">WS-ACADEMY</span>
+    </div>
+    <div class="ws-issues">
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Academy portal scaffold (Next.js)</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m4);border-color:var(--m4)22">v0.4</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Course structure — modules + progress</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m4);border-color:var(--m4)22">v0.4</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Academy ↔ FlipStack integration</div><div class="issue-meta"><span class="priority p-medium">medium</span><span class="m-pill" style="color:var(--m4);border-color:var(--m4)22">v0.4</span></div></div>
+    </div>
+  </div>
+
+  <!-- WS-ECAMPUS -->
+  <div class="ws" style="--ws-color: var(--ws-ecampus)">
+    <div class="ws-header">
+      <span class="ws-icon">🏫</span>
+      <span class="ws-name">eCampus</span>
+      <span class="ws-id">WS-ECAMPUS</span>
+    </div>
+    <div class="ws-issues">
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">eCampus scaffold (Entra ID required)</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m5);border-color:var(--m5)22">v0.5</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Org/team management + course enrolment</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m5);border-color:var(--m5)22">v0.5</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">eCampus ↔ Academy content sync</div><div class="issue-meta"><span class="priority p-medium">medium</span><span class="m-pill" style="color:var(--m5);border-color:var(--m5)22">v0.5</span></div></div>
+    </div>
+  </div>
+
+  <!-- WS-AGENT -->
+  <div class="ws" style="--ws-color: var(--ws-agent)">
+    <div class="ws-header">
+      <span class="ws-icon">🤖</span>
+      <span class="ws-name">Agent</span>
+      <span class="ws-id">WS-AGENT</span>
+    </div>
+    <div class="ws-issues">
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Agent scaffold — Fastify + LLM routing</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m5);border-color:var(--m5)22">v0.5</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Coding assistant in console (extension)</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m5);border-color:var(--m5)22">v0.5</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Task automation via mosgaraged IPC</div><div class="issue-meta"><span class="priority p-medium">medium</span><span class="m-pill" style="color:var(--m5);border-color:var(--m5)22">v0.5</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Cross-service AI (studio, academy, community)</div><div class="issue-meta"><span class="priority p-medium">medium</span><span class="m-pill" style="color:var(--m6);border-color:var(--m6)22">v1.0</span></div></div>
+    </div>
+  </div>
+
+  <!-- WS-DEVENV -->
+  <div class="ws" style="--ws-color: var(--ws-devenv)">
+    <div class="ws-header">
+      <span class="ws-icon">🛠️</span>
+      <span class="ws-name">Dev Environment</span>
+      <span class="ws-id">WS-DEVENV</span>
+    </div>
+    <div class="ws-issues">
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">WSL-first setup — ~/dev/localhost</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m1);border-color:var(--m1)22">v0.1</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">dev-watcher.sh — inotifywait auto-push</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m1);border-color:var(--m1)22">v0.1</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Git bare hub — fan-out to all remotes</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m1);border-color:var(--m1)22">v0.1</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">VS Code WSL auto-connect</div><div class="issue-meta"><span class="priority p-medium">medium</span><span class="m-pill" style="color:var(--m1);border-color:var(--m1)22">v0.1</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Visual Studio 2022 — WSL + VPS SSH</div><div class="issue-meta"><span class="priority p-medium">medium</span><span class="m-pill" style="color:var(--m2);border-color:var(--m2)22">v0.2</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">OneDrive smart backup</div><div class="issue-meta"><span class="priority p-medium">medium</span><span class="m-pill" style="color:var(--m2);border-color:var(--m2)22">v0.2</span></div></div>
+    </div>
+  </div>
+
+  <!-- WS-WINDOWS -->
+  <div class="ws" style="--ws-color: var(--ws-windows)">
+    <div class="ws-header">
+      <span class="ws-icon">🪟</span>
+      <span class="ws-name">Windows Tooling</span>
+      <span class="ws-id">WS-WINDOWS</span>
+    </div>
+    <div class="ws-issues">
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Context menu — send text to Planner/ADO/GitHub</div><div class="issue-meta"><span class="priority p-medium">medium</span><span class="m-pill" style="color:var(--m2);border-color:var(--m2)22">v0.2</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Mini-popup — title, notes, due date, destination</div><div class="issue-meta"><span class="priority p-medium">medium</span><span class="m-pill" style="color:var(--m2);border-color:var(--m2)22">v0.2</span></div></div>
+    </div>
+  </div>
+
+  <!-- WS-CICD -->
+  <div class="ws" style="--ws-color: var(--ws-cicd)">
+    <div class="ws-header">
+      <span class="ws-icon">🚀</span>
+      <span class="ws-name">CI / CD</span>
+      <span class="ws-id">WS-CICD</span>
+    </div>
+    <div class="ws-issues">
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Multi-arch build matrix — all platform images</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m1);border-color:var(--m1)22">v0.1</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Deploy to Oracle VPS on version tag</div><div class="issue-meta"><span class="priority p-high">high</span><span class="m-pill" style="color:var(--m1);border-color:var(--m1)22">v0.1</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Semver + CalVer versioning scripts</div><div class="issue-meta"><span class="priority p-medium">medium</span><span class="m-pill" style="color:var(--m1);border-color:var(--m1)22">v0.1</span></div></div>
+      <div class="issue"><div class="issue-dot"></div><div class="issue-text">Azure DevOps pipeline mirror</div><div class="issue-meta"><span class="priority p-medium">medium</span><span class="m-pill" style="color:var(--m3);border-color:var(--m3)22">v0.3</span></div></div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

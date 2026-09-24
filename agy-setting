@@ -1,0 +1,4 @@
+export PATH="$PATH:/mnt/c/Users/igewe/AppData/Local/Programs/Antigravity/bin"
+
+# Make the fix permanent
+echo 'export PATH="$PATH:/mnt/c/Users/igewe/AppData/Local/Programs/Antigravity/bin"' >> ~/.bashrc

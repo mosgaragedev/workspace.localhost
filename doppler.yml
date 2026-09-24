@@ -1,0 +1,4 @@
+setup:
+  - project: workspace.localhost
+    env_file: /workspace.localhost
+    config: /.config

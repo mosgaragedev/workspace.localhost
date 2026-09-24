@@ -1,0 +1,39 @@
+# clangd configuration
+# https://clangd.llvm.org/config
+
+CompileFlags:
+  # Treat all files as C++20 by default; override per-file via compile_commands.json.
+  Add:
+    - "-std=c++20"
+    - "-Wall"
+    - "-Wextra"
+    - "-Wpedantic"
+  Compiler: clang++
+
+Diagnostics:
+  # Enable a useful subset of clang-tidy checks automatically.
+  ClangTidy:
+    Add:
+      - modernize-*
+      - performance-*
+      - bugprone-*
+      - readability-identifier-naming
+      - cppcoreguidelines-*
+    Remove:
+      # These tend to be noisy / opinionated — remove if you prefer them.
+      - modernize-use-trailing-return-type
+      - cppcoreguidelines-avoid-magic-numbers
+      - cppcoreguidelines-pro-bounds-pointer-arithmetic
+  UnusedIncludes: Strict
+
+InlayHints:
+  Enabled: true
+  ParameterNames: true
+  DeducedTypes: true
+  Designators: true
+
+Hover:
+  ShowAKA: true
+
+Index:
+  Background: Build

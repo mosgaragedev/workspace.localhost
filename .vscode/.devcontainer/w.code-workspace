@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "/home/devops/workspace"
+		}
+	],
+	"settings": {
+		"terminal.integrated.defaultProfile.linux": "bash",
+		"terminal.integrated.fontSize": 14,
+		"git.confirmSync": false,
+		"errorLens.enabledDiagnosticLevels": [
+			"error",
+			"warning"
+		],
+		"git.ignoreLimitWarning": true
+	}
+}

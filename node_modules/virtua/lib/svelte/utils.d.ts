@@ -1,0 +1,16 @@
+import { ItemsRange } from '../core/index.js';
+export declare const styleToString: (obj: Record<string, string | undefined>) => string;
+export declare const isSameRange: (prev: ItemsRange, next: ItemsRange) => boolean;
+export declare const defaultGetKey: (_data: unknown, i: number) => string;
+export type ItemAttrs = {
+    [key: string]: any;
+    style?: Record<string, string | undefined>;
+    class?: string;
+};
+/**
+ * A function that provides properties/attributes for item element
+ */
+export type ItemProps<T = unknown> = (payload: {
+    item: T;
+    index: number;
+}) => ItemAttrs | undefined;

@@ -1,0 +1,898 @@
+{
+	"Class and Namespace": {
+		"prefix": "class-namespace",
+		"body": [
+			"using System;",
+			"using System.Collections.Generic;",
+			"using System.Linq;",
+			"using System.Threading.Tasks;",
+			"",
+			"namespace ${1:Namespace}",
+			"{",
+			"\tpublic class ${TM_FILENAME_BASE}",
+			"\t{",
+			"\t\t$0",
+			"\t}",
+			"}"
+		]
+	},
+	"Static Class and Namespace": {
+		"prefix": "class-static-namespace",
+		"body": [
+			"using System;",
+			"using System.Collections.Generic;",
+			"using System.Linq;",
+			"using System.Threading.Tasks;",
+			"",
+			"namespace ${1:Namespace}",
+			"{",
+			"\tpublic static class ${TM_FILENAME_BASE}",
+			"\t{",
+			"\t\t$0",
+			"\t}",
+			"}"
+		]
+	},
+	"Interface and Namespace": {
+		"prefix": "interface-namespace",
+		"body": [
+			"using System;",
+			"using System.Collections.Generic;",
+			"using System.Linq;",
+			"using System.Threading.Tasks;",
+			"",
+			"namespace ${1:Namespace}",
+			"{",
+			"\tpublic interface ${TM_FILENAME_BASE}",
+			"\t{",
+			"\t\t$0",
+			"\t}",
+			"}"
+		]
+	},
+	"Enum and Namespace": {
+		"prefix": "enum-namespace",
+		"body": [
+			"namespace ${1:Namespace}",
+			"{",
+			"\tpublic enum ${TM_FILENAME_BASE}",
+			"\t{",
+			"\t\t$0",
+			"\t}",
+			"}"
+		]
+	},
+	"Static Class": {
+		"prefix": "class-static",
+		"body": [
+			"${1:public} static class ${2:$TM_FILENAME_BASE}",
+			"{",
+			"\t$0",
+			"}"
+		]
+	},
+	"Guess Namespace": {
+		"prefix": "namespace-guess",
+		"body": [
+			"${TM_DIRECTORY/(.*[\\\\\\/](repos|src|test|tests|desktop|projects)[\\\\\\/])|(^([a-z]:)?[\\\\\\/])|([\\\\\\/])|([^\\w.])/${5:+.}${6:+_}/gi}"
+		],
+		"description": "Namespace based on directory structure.\n\nFor it to work your project's root folder must be in one of the following directories:\n- repos,\n- src,\n- test,\n- tests,\n- projects,\n- desktop.\n\nFolder name matching is case insensitive."
+	},
+	"Method": {
+		"prefix": "method",
+		"body": [
+			"${1:public} ${2:void} ${3:MethodName}($4)",
+			"{",
+			"\t$0",
+			"}"
+		]
+	},
+	"Async Method": {
+		"prefix": "method-async",
+		"body": [
+			"${1:public} async ${2:Task} ${3:MethodName}${4:Async}($5)",
+			"{",
+			"\t$0",
+			"}"
+		]
+	},
+	"Expression Bodied Method": {
+		"prefix": "method-exp",
+		"body": [
+			"${1:public} ${2:void} ${3:MethodName}($4) => $0;"
+		]
+	},
+	"Async Expression Bodied Method": {
+		"prefix": "method-exp-async",
+		"body": [
+			"${1:public} async ${2:Task} ${3:MethodName}${4:Async}($5) => $0;"
+		]
+	},
+	"Field": {
+		"prefix": "field",
+		"body": [
+			"private ${1:readonly} ${2:Type} ${3:_name};"
+		]
+	},
+	"Constant Field": {
+		"prefix": "const",
+		"body": [
+			"${1:public} const ${2:string} ${3:Name} = ${4:\"\"};"
+		]
+	},
+	"Property with changeable Access Modifier": {
+		"prefix": "propp",
+		"body": [
+			"${1:private} ${2:int} ${3:MyProperty} { get; set; }"
+		]
+	},
+	"Expression Bodied Property": {
+		"prefix": "prop-exp",
+		"body": [
+			"${1:public} ${2:int} ${3:MyProperty} => $0;"
+		]
+	},
+	"Expression Bodied Property and Backing Field": {
+		"prefix": "propfull-exp",
+		"body": [
+			"private ${1:int} ${2:_myVar};",
+			"",
+			"public $1 ${3:MyProperty}",
+			"{",
+			"\tget => $2;",
+			"\tset => $2 = value;",
+			"}"
+		]
+	},
+	"Foreach with index": {
+		"prefix": "foreach-index",
+		"body": [
+			"foreach (var (${1:value}, ${2:i}) in ${3:collection}.Select((v, i) => (v, i)))",
+			"{",
+			"\t$0",
+			"}"
+		]
+	},
+	"Fully modifiable For Loop": {
+		"prefix": "for-full",
+		"body": [
+			"for (var ${1:i} = ${2:0}; $1 ${3:<} ${4:length}; $1${5:++})",
+			"{",
+			"\t$0",
+			"}"
+		]
+	},
+	"Switch Expression": {
+		"prefix": "switch-exp",
+		"body": [
+			"${1:value} switch  ",
+			"{  ",
+			"\t${2:case} => $3",
+			"}"
+		]
+	},
+	"Throw Exception": {
+		"prefix": "throw",
+		"body": [
+			"throw new ${1:ArgumentException()};"
+		]
+	},
+	"CamelCase Name": {
+		"prefix": "c",
+		"body": "${TM_CURRENT_LINE/(^(([^<>]|<.*>|=>)*[ \\t(,])?(\\w+(<[\\w \\t,.<>[\\]()]+>)?\\.)*I?([A-Z]|(?<!I)[a-z_])(\\w*)(<[\\w \\t,.<>[\\]()]+>)?(\\[[ \\t,]*])*[ \\t]+c(?!\\w))|(.*)/${6:/downcase}$7/g}",
+		"description": "CamelCased name based on preceding type."
+	},
+	"PascalCase Name": {
+		"prefix": "p",
+		"body": "${TM_CURRENT_LINE/(^(([^<>]|<.*>|=>)*[ \\t(,])?(\\w+(<[\\w \\t,.<>[\\]()]+>)?\\.)*I?([A-Z]|(?<!I)[a-z_])(\\w*)(<[\\w \\t,.<>[\\]()]+>)?(\\[[ \\t,]*])*[ \\t]+p(?!\\w))|(.*)/${6:/upcase}$7/g}",
+		"description": "PascalCased name based on preceding type."
+	},
+	"Underscored Name": {
+		"prefix": "_",
+		"body": "${TM_CURRENT_LINE/(^(([^<>]|<.*>|=>)*[ \\t(,])?(\\w+(<[\\w \\t,.<>[\\]()]+>)?\\.)*I?([A-Z]|(?<!I)[a-z_])(\\w*)(<[\\w \\t,.<>[\\]()]+>)?(\\[[ \\t,]*])*[ \\t]+_(?!\\w))|(.*)/${6:+_}${6:/downcase}$7/g}",
+		"description": "Underscored name based on preceding type."
+	},
+	"Filename Base": {
+		"prefix": "filename",
+		"body": "${TM_FILENAME_BASE}"
+	},
+	"MVC Controller": {
+		"prefix": "asp-mvc-controller",
+		"body": [
+			"using System;",
+			"using System.Collections.Generic;",
+			"using System.Linq;",
+			"using System.Threading.Tasks;",
+			"using Microsoft.AspNetCore.Mvc;",
+			"",
+			"namespace ${1:Namespace}",
+			"{",
+			"\tpublic class ${TM_FILENAME_BASE} : Controller",
+			"\t{",
+			"\t\tpublic IActionResult ${2:Index}()",
+			"\t\t{",
+			"\t\t\t$0",
+			"\t\t\treturn View();",
+			"\t\t}",
+			"\t}",
+			"}"
+		]
+	},
+	"API Controller": {
+		"prefix": "asp-api-controller",
+		"body": [
+			"using System;",
+			"using System.Collections.Generic;",
+			"using System.Linq;",
+			"using System.Threading.Tasks;",
+			"using Microsoft.AspNetCore.Mvc;",
+			"",
+			"namespace ${1:Namespace}$0",
+			"{",
+			"\t[Route(\"api/[controller]\")]",
+			"\t[ApiController]",
+			"\tpublic class ${TM_FILENAME_BASE} : ControllerBase",
+			"\t{",
+			"\t\t[HttpGet]",
+			"\t\tpublic ActionResult<IEnumerable<string>> Get()",
+			"\t\t{",
+			"\t\t\treturn new string[] { \"value1\", \"value2\" };",
+			"\t\t}",
+			"",
+			"\t\t[HttpGet(\"{id}\")]",
+			"\t\tpublic ActionResult<string> Get(int id)",
+			"\t\t{",
+			"\t\t\treturn \"value\";",
+			"\t\t}",
+			"",
+			"\t\t[HttpPost]",
+			"\t\tpublic void Post([FromBody] string value)",
+			"\t\t{",
+			"\t\t}",
+			"",
+			"\t\t[HttpPut(\"{id}\")]",
+			"\t\tpublic void Put(int id, [FromBody] string value)",
+			"\t\t{",
+			"\t\t}",
+			"",
+			"\t\t[HttpDelete(\"{id}\")]",
+			"\t\tpublic void Delete(int id)",
+			"\t\t{",
+			"\t\t}",
+			"\t}",
+			"}"
+		]
+	},
+	"Page Model": {
+		"prefix": "asp-page-model",
+		"body": [
+			"using System;",
+			"using System.Collections.Generic;",
+			"using System.Linq;",
+			"using System.Threading.Tasks;",
+			"using Microsoft.AspNetCore.Mvc;",
+			"using Microsoft.AspNetCore.Mvc.RazorPages;",
+			"",
+			"namespace ${1:Namespace}",
+			"{",
+			"\tpublic class ${TM_FILENAME_BASE/(.*)\\..+$/$1/}Model : PageModel",
+			"\t{",
+			"\t\tpublic void OnGet()",
+			"\t\t{",
+			"\t\t\t$0",
+			"\t\t}",
+			"\t}",
+			"}"
+		]
+	},
+	"View Component": {
+		"prefix": "asp-view-component",
+		"body": [
+			"using System;",
+			"using System.Collections.Generic;",
+			"using System.Linq;",
+			"using System.Threading.Tasks;",
+			"using Microsoft.AspNetCore.Mvc;",
+			"",
+			"namespace ${1:Namespace}",
+			"{",
+			"\tpublic class ${TM_FILENAME_BASE} : ViewComponent",
+			"\t{",
+			"\t\tpublic IViewComponentResult Invoke()",
+			"\t\t{",
+			"\t\t\t$0",
+			"\t\t\treturn View();",
+			"\t\t}",
+			"\t}",
+			"}"
+		]
+	},
+	"Action Filter": {
+		"prefix": "asp-action-filter",
+		"body": [
+			"using System;",
+			"using System.Collections.Generic;",
+			"using System.Linq;",
+			"using System.Threading.Tasks;",
+			"using Microsoft.AspNetCore.Mvc.Filters;",
+			"",
+			"namespace ${1:Namespace}",
+			"{",
+			"\tpublic class ${TM_FILENAME_BASE} : IActionFilter",
+			"\t{",
+			"\t\tpublic void OnActionExecuting(ActionExecutingContext context)",
+			"\t\t{",
+			"\t\t\t$0",
+			"\t\t}",
+			"",
+			"\t\tpublic void OnActionExecuted(ActionExecutedContext context)",
+			"\t\t{",
+			"",
+			"\t\t}",
+			"\t}",
+			"}"
+		]
+	},
+	"MVC Action": {
+		"prefix": "asp-action",
+		"body": [
+			"public IActionResult ${1:ActionName}($2)",
+			"{",
+			"\t$0",
+			"\treturn View();",
+			"}"
+		]
+	},
+	"MVC Action Async": {
+		"prefix": "asp-action-async",
+		"body": [
+			"public async Task<IActionResult> ${1:ActionName}($2)",
+			"{",
+			"\t$0",
+			"\treturn View();",
+			"}"
+		]
+	},
+	"API Action GET": {
+		"prefix": "asp-action-get",
+		"body": [
+			"[HttpGet(\"${1:{id\\}}\")]",
+			"public ActionResult<${2:string}> ${3:Get}(${4:int} ${5:id})",
+			"{",
+			"\t$0",
+			"}"
+		]
+	},
+	"API Action GET Async": {
+		"prefix": "asp-action-get-async",
+		"body": [
+			"[HttpGet(\"${1:{id\\}}\")]",
+			"public async Task<ActionResult<${2:string}>> ${3:GetAsync}(${4:int} ${5:id})",
+			"{",
+			"\t$0",
+			"}"
+		]
+	},
+	"API Action GET Enumerable": {
+		"prefix": "asp-action-get-enumerable",
+		"body": [
+			"[HttpGet]",
+			"public ActionResult<IEnumerable<${1:string}>> ${2:Get}()",
+			"{",
+			"\t$0",
+			"}"
+		]
+	},
+	"API Action GET Enumerable Async": {
+		"prefix": "asp-action-get-enumerable-async",
+		"body": [
+			"[HttpGet]",
+			"public async Task<ActionResult<IEnumerable<${1:string}>>> ${2:GetAsync}()",
+			"{",
+			"\t$0",
+			"}"
+		]
+	},
+	"API Action POST": {
+		"prefix": "asp-action-post",
+		"body": [
+			"[HttpPost]",
+			"public void ${1:Post}([FromBody] ${2:string} ${3:value})",
+			"{",
+			"\t$0",
+			"}"
+		]
+	},
+	"API Action POST Async": {
+		"prefix": "asp-action-post-async",
+		"body": [
+			"[HttpPost]",
+			"public async Task ${1:PostAsync}([FromBody] ${2:string} ${3:value})",
+			"{",
+			"\t$0",
+			"}"
+		]
+	},
+	"API Action PUT": {
+		"prefix": "asp-action-put",
+		"body": [
+			"[HttpPut(\"${1:{id\\}}\")]",
+			"public void ${2:Put}(${3:int} ${4:id}, [FromBody] ${5:string} ${6:value})",
+			"{",
+			"\t$0",
+			"}"
+		]
+	},
+	"API Action PUT Async": {
+		"prefix": "asp-action-put-async",
+		"body": [
+			"[HttpPut(\"${1:{id\\}}\")]",
+			"public async Task ${2:PutAsync}(${3:int} ${4:id}, [FromBody] ${5:string} ${6:value})",
+			"{",
+			"\t$0",
+			"}"
+		]
+	},
+	"API Action DELETE": {
+		"prefix": "asp-action-delete",
+		"body": [
+			"[HttpDelete(\"${1:{id\\}}\")]",
+			"public void ${2:Delete}(${3:int} ${4:id})",
+			"{",
+			"\t$0",
+			"}"
+		]
+	},
+	"API Action DELETE Async": {
+		"prefix": "asp-action-delete-async",
+		"body": [
+			"[HttpDelete(\"${1:{id\\}}\")]",
+			"public async Task ${2:DeleteAsync}(${3:int} ${4:id})",
+			"{",
+			"\t$0",
+			"}"
+		]
+	},
+	"Page Handler": {
+		"prefix": "asp-page-handler",
+		"body": [
+			"public ${1:void} On${2:Get}(${3})",
+			"{",
+			"\t$0",
+			"}"
+		]
+	},
+	"Page Handler Async": {
+		"prefix": "asp-page-handler-async",
+		"body": [
+			"public async ${1:Task} On${2:Get}Async(${3})",
+			"{",
+			"\t$0",
+			"}"
+		]
+	},
+	"Property with BindProperty attribute": {
+		"prefix": "asp-prop-bind",
+		"body": [
+			"[BindProperty]",
+			"public ${1:int} ${2:MyProperty} { get; set; }"
+		]
+	},
+	"ModelState Guard Clause": {
+		"prefix": "asp-model-state-guard",
+		"body": [
+			"if (!ModelState.IsValid)",
+			"{",
+			"\treturn ${1:View()};",
+			"}"
+		]
+	},
+	"Add DbContext": {
+		"prefix": "asp-add-db-context",
+		"body": [
+			"services.AddDbContext<${1:ApplicationDbContext}>(options =>",
+			"\toptions.${2:UseSqlServer}(Configuration.GetConnectionString(\"${3:DefaultConnection}\")));"
+		]
+	},
+	"DbContext": {
+		"prefix": "ef-db-context",
+		"body": [
+			"using System;",
+			"using System.Collections.Generic;",
+			"using System.Linq;",
+			"using System.Threading.Tasks;",
+			"using Microsoft.EntityFrameworkCore;",
+			"",
+			"namespace ${1:Namespace}",
+			"{",
+			"\tpublic class ${TM_FILENAME_BASE} : DbContext",
+			"\t{",
+			"\t\tpublic ${TM_FILENAME_BASE}(DbContextOptions<${TM_FILENAME_BASE}> options) : base(options) { }",
+			"\t\t$0",
+			"\t}",
+			"}"
+		]
+	},
+	"DbSet": {
+		"prefix": "ef-db-set",
+		"body": [
+			"public DbSet<${1:Entity}> ${2:Entities} { get; set; }"
+		]
+	},
+	"OnModelCreating Method": {
+		"prefix": "ef-on-model-creating",
+		"body": [
+			"protected override void OnModelCreating(ModelBuilder builder)",
+			"{",
+			"\tbase.OnModelCreating(builder);",
+			"\t$0",
+			"}"
+		]
+	},
+	"AutoMapper Profile": {
+		"prefix": "am-profile",
+		"body": [
+			"using System;",
+			"using System.Collections.Generic;",
+			"using System.Linq;",
+			"using System.Threading.Tasks;",
+			"using AutoMapper;",
+			"",
+			"namespace ${1:Namespace}",
+			"{",
+			"\tpublic class ${TM_FILENAME_BASE} : Profile",
+			"\t{",
+			"\t\tpublic ${TM_FILENAME_BASE}()",
+			"\t\t{",
+			"\t\t\tCreateMap<${2:SourceType}, ${3:DestinationType}>();$0",
+			"\t\t}",
+			"\t}",
+			"}"
+		]
+	},
+	"AutoMapper Type Converter": {
+		"prefix": "am-type-converter",
+		"body": [
+			"using System;",
+			"using System.Collections.Generic;",
+			"using System.Linq;",
+			"using System.Threading.Tasks;",
+			"using AutoMapper;",
+			"",
+			"namespace ${1:Namespace}",
+			"{",
+			"\tpublic class ${TM_FILENAME_BASE} : ITypeConverter<${2:SourceType}, ${3:DestinationType}>",
+			"\t{",
+			"\t\tpublic $3 Convert($2 source, $3 destination, ResolutionContext context)",
+			"\t\t{",
+			"\t\t\t$0",
+			"\t\t}",
+			"\t}",
+			"}"
+		]
+	},
+	"xUnit Test Class": {
+		"prefix": "xu-class",
+		"body": [
+			"using System;",
+			"using System.Collections.Generic;",
+			"using System.Linq;",
+			"using System.Threading.Tasks;",
+			"using Xunit;",
+			"",
+			"namespace ${1:Namespace}",
+			"{",
+			"\tpublic class ${TM_FILENAME_BASE}",
+			"\t{",
+			"\t\t[Fact]",
+			"\t\tpublic void ${2:TestName}()",
+			"\t\t{",
+			"\t\t\t$0",
+			"\t\t}",
+			"\t}",
+			"}"
+		]
+	},
+	"xUnit Fact": {
+		"prefix": "xu-fact",
+		"body": [
+			"[Fact]",
+			"public void ${1:TestName}()",
+			"{",
+			"\t$0",
+			"}"
+		]
+	},
+	"NuGet Package Reference": {
+		"prefix": "ds-nuget-reference",
+		"body": [
+			"#r \"nuget: ${1:PackageName}, ${2:Version}\""
+		]
+	},
+	"Common NuGet Package References": {
+		"prefix": "ds-nuget-references-common",
+		"body": [
+			"#r \"nuget: ${1|Newtonsoft.Json\\, 12.0.3,AngleSharp\\, 0.13.0,Flurl.Http\\, 2.4.2,Dapper\\, 2.0.30,System.Data.SQLite\\, 1.0.112,DotMarkdown\\, 0.1.0|}\""
+		]
+	},
+	"Script Reference": {
+		"prefix": "ds-script-load",
+		"body": [
+			"#load \"${1:scriptFile.csx}\""
+		]
+	},
+	"GetScriptFolder Method": {
+		"prefix": "ds-path",
+		"body": [
+			"public static string GetScriptFolder([CallerFilePath] string path = null) => Path.GetDirectoryName(path);"
+		]
+	},
+	"SignalR Hub": {
+		"prefix": "sr-hub",
+		"body": [
+			"using System;",
+			"using System.Collections.Generic;",
+			"using System.Linq;",
+			"using System.Threading.Tasks;",
+			"using Microsoft.AspNetCore.SignalR;",
+			"",
+			"namespace ${1:Namespace}",
+			"{",
+			"\tpublic class ${TM_FILENAME_BASE} : Hub",
+			"\t{",
+			"\t\t$0",
+			"\t}",
+			"}"
+		]
+	},
+	"OnConnectedAsync Method": {
+		"prefix": "sr-on-connected-async",
+		"body": [
+			"public override async Task OnConnectedAsync()",
+			"{",
+			"\t$0",
+			"\tawait base.OnConnectedAsync();",
+			"}"
+		]
+	},
+	"OnDisconnectedAsync Method": {
+		"prefix": "sr-on-disconnected-async",
+		"body": [
+			"public override async Task OnDisconnectedAsync(Exception exception)",
+			"{",
+			"\t$0",
+			"\tawait base.OnDisconnectedAsync(exception);",
+			"}"
+		]
+	},
+	"Unit of Work": {
+		"prefix": "dp-uow",
+		"body": [
+			"namespace ${1:Namespace}",
+			"{",
+			"\tpublic class ${TM_FILENAME_BASE} : I${TM_FILENAME_BASE}",
+			"\t{",
+			"\t\tprivate readonly ${2:ApplicationDbContext} _dbContext;",
+			"",
+			"\t\tpublic ${TM_FILENAME_BASE}($2 dbContext)",
+			"\t\t{",
+			"\t\t\t_dbContext = dbContext;",
+			"\t\t}",
+			"",
+			"\t\tprivate ${3:ItemRepository} ${4:_itemRepository};",
+			"\t\tpublic I$3 ${5:Items} => $4 ??= new $3(_dbContext);",
+			"",
+			"\t\tpublic void Complete() => _dbContext.SaveChanges();",
+			"\t}",
+			"}"
+		]
+	},
+	"Unit of Work Interface": {
+		"prefix": "dp-uow-interface",
+		"body": [
+			"namespace ${1:Namespace}",
+			"{",
+			"\tpublic interface ${TM_FILENAME_BASE}",
+			"\t{",
+			"\t\t${2:IItemRepository} ${3:Items} { get; }",
+			"",
+			"\t\tvoid Complete();",
+			"\t}",
+			"}"
+		]
+	},
+	"Repository": {
+		"prefix": "dp-repo",
+		"body": [
+			"using System;",
+			"using System.Collections.Generic;",
+			"using System.Linq;",
+			"using System.Threading.Tasks;",
+			"",
+			"namespace ${1:Namespace}",
+			"{",
+			"\tpublic class ${TM_FILENAME_BASE} : I${TM_FILENAME_BASE}",
+			"\t{",
+			"\t\tprivate readonly ${2:ApplicationDbContext} _dbContext;",
+			"",
+			"\t\tpublic ${TM_FILENAME_BASE}($2 dbContext)",
+			"\t\t{",
+			"\t\t\t_dbContext = dbContext;",
+			"\t\t}",
+			"",
+			"\t\tpublic ${3:Item} Add($3 ${4:item}) => _dbContext.${5:Items}.Add($4).Entity;",
+			"",
+			"\t\tpublic void Remove($3 $4) => _dbContext.$5.Remove($4);",
+			"",
+			"\t\tpublic IEnumerable<$3> ListAll() => _dbContext.$5.ToList();",
+			"",
+			"\t\tpublic $3 GetById(${6:int} id) => _dbContext.$5.Find(id);",
+			"\t}",
+			"}"
+		]
+	},
+	"Standalone Repository": {
+		"prefix": "dp-repo-standalone",
+		"body": [
+			"using System;",
+			"using System.Collections.Generic;",
+			"using System.Linq;",
+			"using System.Threading.Tasks;",
+			"",
+			"namespace ${1:Namespace}",
+			"{",
+			"\tpublic class ${TM_FILENAME_BASE} : I${TM_FILENAME_BASE}",
+			"\t{",
+			"\t\tprivate readonly ${2:ApplicationDbContext} _dbContext;",
+			"",
+			"\t\tpublic ${TM_FILENAME_BASE}($2 dbContext)",
+			"\t\t{",
+			"\t\t\t_dbContext = dbContext;",
+			"\t\t}",
+			"",
+			"\t\tpublic ${3:Item} Add($3 ${4:item}) => _dbContext.${5:Items}.Add($4).Entity;",
+			"",
+			"\t\tpublic void Remove($3 $4) => _dbContext.$5.Remove($4);",
+			"",
+			"\t\tpublic IEnumerable<$3> ListAll() => _dbContext.$5.ToList();",
+			"",
+			"\t\tpublic $3 GetById(${6:int} id) => _dbContext.$5.Find(id);",
+			"",
+			"\t\tpublic void Save() => _dbContext.SaveChanges();",
+			"\t}",
+			"}"
+		]
+	},
+	"Derived Repository": {
+		"prefix": "dp-repo-derived",
+		"body": [
+			"using System;",
+			"using System.Collections.Generic;",
+			"using System.Linq;",
+			"using System.Threading.Tasks;",
+			"",
+			"namespace ${1:Namespace}",
+			"{",
+			"\tpublic class ${TM_FILENAME_BASE} : ${2:BaseRepository}<${3:Item}>, I${TM_FILENAME_BASE}",
+			"\t{",
+			"\t\tpublic ${TM_FILENAME_BASE}(${4:ApplicationDbContext} dbContext) : base(dbContext) { }",
+			"\t}",
+			"}"
+		]
+	},
+	"Repository Interface": {
+		"prefix": "dp-repo-interface",
+		"body": [
+			"using System;",
+			"using System.Collections.Generic;",
+			"using System.Threading.Tasks;",
+			"",
+			"namespace ${1:Namespace}",
+			"{",
+			"\tpublic interface ${TM_FILENAME_BASE}",
+			"\t{",
+			"\t\t${2:Item} Add($2 ${3:item});",
+			"\t\tvoid Remove($2 $3);",
+			"\t\tIEnumerable<$2> ListAll();",
+			"\t\t$2 GetById(${4:int} id);",
+			"\t}",
+			"}"
+		]
+	},
+	"Standalone Repository Interface": {
+		"prefix": "dp-repo-interface-standalone",
+		"body": [
+			"using System;",
+			"using System.Collections.Generic;",
+			"using System.Threading.Tasks;",
+			"",
+			"namespace ${1:Namespace}",
+			"{",
+			"\tpublic interface ${TM_FILENAME_BASE}",
+			"\t{",
+			"\t\t${2:Item} Add($2 ${3:item});",
+			"\t\tvoid Remove($2 $3);",
+			"\t\tIEnumerable<$2> ListAll();",
+			"\t\t$2 GetById(${4:int} id);",
+			"\t\tvoid Save();",
+			"\t}",
+			"}"
+		]
+	},
+	"Base Repository": {
+		"prefix": "dp-repo-base",
+		"body": [
+			"using System;",
+			"using System.Collections.Generic;",
+			"using System.Linq;",
+			"using System.Threading.Tasks;",
+			"",
+			"namespace ${1:Namespace}",
+			"{",
+			"\tpublic abstract class ${TM_FILENAME_BASE}<TEntity> : ${2:I${TM_FILENAME_BASE}}<TEntity> where TEntity : ${3:BaseEntity}",
+			"\t{",
+			"\t\tprotected readonly ${4:ApplicationDbContext} _dbContext;",
+			"",
+			"\t\tprotected ${TM_FILENAME_BASE}($4 dbContext)",
+			"\t\t{",
+			"\t\t\t_dbContext = dbContext;",
+			"\t\t}",
+			"",
+			"\t\tpublic virtual TEntity Add(TEntity entity) => _dbContext.Set<TEntity>().Add(entity).Entity;",
+			"",
+			"\t\tpublic virtual void Remove(TEntity entity) => _dbContext.Set<TEntity>().Remove(entity);",
+			"",
+			"\t\tpublic virtual IEnumerable<TEntity> ListAll() => _dbContext.Set<TEntity>().ToList();",
+			"",
+			"\t\tpublic virtual TEntity GetById(${5:int} id) => _dbContext.Set<TEntity>().Find(id);",
+			"\t}",
+			"}"
+		]
+	},
+	"Base Repository Interface": {
+		"prefix": "dp-repo-base-interface",
+		"body": [
+			"using System;",
+			"using System.Collections.Generic;",
+			"using System.Threading.Tasks;",
+			"",
+			"namespace ${1:Namespace}",
+			"{",
+			"\tpublic interface ${TM_FILENAME_BASE}<TEntity> where TEntity : ${2:BaseEntity}",
+			"\t{",
+			"\t\tTEntity Add(TEntity entity);",
+			"\t\tvoid Remove(TEntity entity);",
+			"\t\tIEnumerable<TEntity> ListAll();",
+			"\t\tTEntity GetById(${3:int} id);",
+			"\t}",
+			"}"
+		]
+	},
+	"Derived Repository Interface": {
+		"prefix": "dp-repo-interface-derived",
+		"body": [
+			"using System;",
+			"using System.Collections.Generic;",
+			"using System.Threading.Tasks;",
+			"",
+			"namespace ${1:Namespace}",
+			"{",
+			"\tpublic interface ${TM_FILENAME_BASE} : ${2:IBaseRepository}<${3:Entity}>",
+			"\t{",
+			"\t}",
+			"}"
+		]
+	},
+	"#pragma warning disable directive": {
+		"prefix": "warning-disable",
+		"body": [
+			"#pragma warning disable ${1:RCS1090}"
+		]
+	},
+	"#pragma warning restore directive": {
+		"prefix": "warning-restore",
+		"body": [
+			"#pragma warning restore ${1:RCS1090}"
+		]
+	}
+}

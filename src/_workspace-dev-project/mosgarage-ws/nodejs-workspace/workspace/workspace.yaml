@@ -1,0 +1,34 @@
+---
+# mandatory
+name: Node.js workspace
+doc_url: https://github.com/bluxmit/alnoda-workspaces/tree/main/workspaces/nodejs-workspace
+repository: https://github.com/bluxmit/alnoda-workspaces/
+author: bluxmit
+version: 5.0
+description: |
+  Browser-based portable and containerized development environment for Javascript Node.js projects
+
+tags: javascript, nodejs, npm, yarn, nvm
+
+# UI icons
+logo: nodejs-circle-white.svg
+favicon: nodejs-circle.svg
+
+# Homepage UI appearance
+styles:
+  font: Open Sans # chose any from https://fonts.google.com/
+  colors:
+    light:
+      primary: "#3E863D"
+      accent: "#C53635"
+      title: "#233056"
+      text: "#233056"
+    dark:
+      primary: "#3E863D"
+      accent: "#3E863D"
+      background: "#233056"
+      title: "#FFFFFF"
+      text: "#FFFFFF"
+  common_colors:
+    header: "#ffffff"
+    nav: "#eab676"

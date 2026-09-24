@@ -1,0 +1,65 @@
+---
+# mandatory
+name: Emacs workspace
+doc_url: https://docs.alnoda.org/
+repository: https://github.com/bluxmit/alnoda-workspaces/
+author: bluxmit
+version: 5.0
+description: |
+  Workspace with hyperextensible Emacs-based text editor
+
+tags: code editor, emacs
+
+logo: emacs-circle-white.svg
+favicon: emacs-circle.svg
+
+styles:
+  font: Noto Sans Mono
+  colors:
+    light:
+      primary: "#2E3440"
+      accent: "#909C63"
+      background: "#F5F7F7"
+      title: "#86BFCE"
+      text: "#2E3440"
+      code_text: "#86BFCE"
+      code_background: "#2E3440"
+    dark:
+      primary: "#4C566A"
+      accent: "#E6866C"
+      background: "#2E3440"
+      title: "#909C63"
+      text: "#86BFCE"
+      code_text: "#2E3440"
+      code_background: "#86BFCE"
+  common_colors:
+    header: "#FFFFFF"
+    nav: "#eab676"
+  
+cheatsheet:
+  Emacs: 
+    - cmd: Esc-x (or Meta-x) 
+      description: run any Emacs command by its extended (i.e., full) name
+    - cmd: Ctrl-x Ctrl-s
+      description: save changes 
+    - cmd: Ctrl-x Ctrl-f
+      description: open file (or create new)
+    - cmd: Ctrl-x u
+      description: undo last change
+    - cmd: Esc-x shell
+      description: open terminal in Emacs window
+    - cmd: Esc-x package-list-packages
+      description: show list of available Emacs packages
+    - cmd: Esc-x dired-sidebar-toggle-sidebar
+      description: show dired file tree
+    - cmd: Esc Esc
+      description: close split screen (or file tree)
+
+links:
+  Developer help:
+    - url: "https://elpa.gnu.org/packages/"
+      name: "ELPA"
+      description: "GNU ELPA Packages"
+    - url: "https://melpa.org/"
+      name: "MELPA"
+      description: "Milkypostman’s Emacs Lisp Package Archive"

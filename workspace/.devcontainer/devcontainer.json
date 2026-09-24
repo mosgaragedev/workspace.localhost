@@ -1,0 +1,159 @@
+// For format details, see https://aka.ms/devcontainer.json
+{
+    "name": "Mosgarage-AI Compiler Environment",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "args": {
+            "LLVM_VERSION": "20",
+            "NODE_VERSION": "22"
+        }
+    },
+
+    // ── Mounts ───────────────────────────────────────────────────────────────
+    // Share host Copilot credentials — container needs no re-login.
+    "mounts": [
+        // Share host Copilot credentials — no re-login needed inside container.
+        "source=${localEnv:HOME}/.copilot,target=/home/mosgarage/.copilot,type=bind,consistency=cached",
+        // Share host git config — preserves user.name, user.email, aliases, etc.
+        "source=${localEnv:HOME}/.gitconfig,target=/home/mosgarage/.gitconfig,type=bind,consistency=cached",
+        // Share host SSH keys — enables git push/pull over SSH without re-setup.
+        "source=${localEnv:HOME}/.ssh,target=/home/mosgarage/.ssh,type=bind,consistency=cached"
+    ],
+
+    // ── Compiler environment ─────────────────────────────────────────────────
+    "remoteEnv": {
+        "CC": "clang",
+        "CXX": "clang++",
+        "CCACHE_CONFIGPATH": "/etc/ccache.conf",
+        // Make typescript-language-server & pyright findable by LSP clients
+        "PATH": "${containerEnv:PATH}:/usr/lib/node_modules/.bin"
+    },
+    // ── Lifecycle scripts ─────────────────────────────────────────────────────
+    "postCreateCommand": "bash .devcontainer/post-create.sh",
+    // post-start: runs every time the container starts — prints env health report.
+    "postStartCommand": "bash .devcontainer/check-env.sh",
+    // ── Extensions ───────────────────────────────────────────────────────────
+    "customizations": {
+        "mosgarage": {
+            "extensions": [
+                "llvm-vs-code-extensions.mosgarage-clangd",
+                "vadimcn.mosgarage-lldb",
+                "ms-python.python",
+                "ms-python.mosgarage-pylance",
+                "charliermarsh.ruff",
+                "dbaeumer.mosgarage-eslint",
+                "esbenp.prettier-mosgarage",
+                "rust-lang.rust-analyzer",
+                "EditorConfig.EditorConfig",
+                "streetsidesoftware.code-spell-checker",
+                "AndrePimenta.claude-code-chat",
+                "GustavoASC.google-drive-mosgarage",
+                "Google.gemini-cli-mosgarage-ide-companion",
+                "lyadhgod.antigravity-mosgarage",
+                "nuwanthapasindu.antigravity-cli",
+                "ReniSilva.antigravity-assist-code",
+                "google.gemini-cli-mosgarage-ide-companion",
+                "Google.colab",
+                "Google.cros-ide",
+                "Google.cloud-resource-manager-mcp-extension",
+                "Anthropic.claude-code",
+                "acebunny00.gemini-cli-launcher",
+                "d3j.gemini-cli-on-mosgarage",
+                "google.google-antigravity"
+            ],
+            "settings": {
+                // ── Shell ────────────────────────────────────────────────────
+                "terminal.integrated.defaultProfile.linux": "zsh",
+                // ── Editor (global) ──────────────────────────────────────────
+                "editor.formatOnSave": true,
+                "editor.rulers": [
+                    100
+                ],
+                "editor.inlayHints.enabled": "on",
+                "editor.codeActionsOnSave": {
+                    "source.fixAll.eslint": "explicit"
+                },
+                // ── C++ / clangd ─────────────────────────────────────────────
+                // Disable ms-cpptools IntelliSense; clangd takes over entirely.
+                "C_Cpp.intelliSenseEngine": "disabled",
+                "clangd.path": "/usr/bin/clangd",
+                "clangd.arguments": [
+                    "--background-index",
+                    "--clang-tidy",
+                    "--completion-style=detailed",
+                    "--header-insertion=iwyu",
+                    "--suggest-missing-includes",
+                    "--cross-file-rename",
+                    "--function-arg-placeholders=true",
+                    "--inlay-hints=true",
+                    "--pch-storage=memory"
+                ],
+                "clangd.inlayHints.enabled": true,
+                "[cpp]": {
+                    "editor.defaultFormatter": "llvm-vs-code-extensions.mosgarage-clangd"
+                },
+                "[c]": {
+                    "editor.defaultFormatter": "llvm-vs-code-extensions.mosgarage-clangd"
+                },
+                // ── Python / Pylance ─────────────────────────────────────────
+                "python.languageServer": "Pylance",
+                "python.analysis.typeCheckingMode": "basic",
+                "python.analysis.autoImportCompletions": true,
+                "python.analysis.indexing": true,
+                "python.analysis.inlayHints.variableTypes": true,
+                "python.analysis.inlayHints.functionReturnTypes": true,
+                "python.analysis.inlayHints.callArgumentNames": "partial",
+                "python.analysis.inlayHints.pytestParameters": true,
+                "[python]": {
+                    "editor.defaultFormatter": "charliermarsh.ruff",
+                    "editor.formatOnSave": true,
+                    "editor.codeActionsOnSave": {
+                        "source.fixAll.ruff": "explicit",
+                        "source.organizeImports.ruff": "explicit"
+                    }
+                },
+                // ── TypeScript ───────────────────────────────────────────────
+                // Point VS Code at the globally installed typescript.
+                "typescript.tsdk": "/usr/lib/node_modules/typescript/lib",
+                "typescript.enablePromptUseWorkspaceTsdk": true,
+                "typescript.inlayHints.parameterNames.enabled": "all",
+                "typescript.inlayHints.parameterTypes.enabled": true,
+                "typescript.inlayHints.variableTypes.enabled": true,
+                "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+                "typescript.inlayHints.enumMemberValues.enabled": true,
+                "[typescript]": {
+                    "editor.defaultFormatter": "esbenp.prettier-mosgarage"
+                },
+                "[typescriptreact]": {
+                    "editor.defaultFormatter": "esbenp.prettier-mosgarage"
+                },
+                // ── JavaScript ───────────────────────────────────────────────
+                "javascript.inlayHints.parameterNames.enabled": "all",
+                "javascript.inlayHints.variableTypes.enabled": true,
+                "javascript.inlayHints.functionLikeReturnTypes.enabled": true,
+                "[javascript]": {
+                    "editor.defaultFormatter": "esbenp.prettier-mosgarage"
+                },
+                "[javascriptreact]": {
+                    "editor.defaultFormatter": "esbenp.prettier-mosgarage"
+                },
+                // ── ESLint (TS + JS) ─────────────────────────────────────────
+                "eslint.validate": [
+                    "javascript",
+                    "javascriptreact",
+                    "typescript",
+                    "typescriptreact"
+                ]
+            }
+        }
+    },
+	"remoteUser": "mosgarage",
+	"features": {
+		"ghcr.io/kvokka/features/aicommit2:1": {},
+		"ghcr.io/devcontainers-extra/features/apt-packages:1": {},
+		"ghcr.io/dotnet/aspire-devcontainer-feature/dotnetaspire:1": {},
+		"ghcr.io/daniellindemann/dev-container-features/dotnet-usersecrets-persistence:0": {},
+		"ghcr.io/devcontainer-config/features/dot-config:4": {},
+		"ghcr.io/postfinance/devcontainer-features/dotnet:1": {}
+	}
+}

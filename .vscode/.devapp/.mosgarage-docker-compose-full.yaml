@@ -1,0 +1,285 @@
+name: ddev-mosgarage
+services:
+  db:
+    build:
+      context: D:\dev\localhost\.ddev\.dbimageBuild
+      dockerfile: Dockerfile
+      args:
+        BASE_IMAGE: ddev/ddev-dbserver-mariadb-10.11:v1.24.10
+        gid: "1000"
+        uid: "1000"
+        username: dev
+    cap_add:
+      - SYS_NICE
+    command: []
+    container_name: ddev-mosgarage-db
+    environment:
+      BITNAMI_VOLUME_DIR: ""
+      COLUMNS: "183"
+      DDEV_DATABASE: mariadb:10.11
+      DDEV_DATABASE_FAMILY: mysql
+      DDEV_GID: "1000"
+      DDEV_GOARCH: amd64
+      DDEV_GOOS: windows
+      DDEV_HOSTNAME: mosgarage.ddev.site
+      DDEV_PHP_VERSION: "8.3"
+      DDEV_PRIMARY_URL: https://mosgarage.ddev.site
+      DDEV_PRIMARY_URL_PORT: "443"
+      DDEV_PRIMARY_URL_WITHOUT_PORT: https://mosgarage.ddev.site
+      DDEV_PROJECT: mosgarage
+      DDEV_PROJECT_TYPE: php
+      DDEV_ROUTER_HTTP_PORT: "33000"
+      DDEV_ROUTER_HTTPS_PORT: "443"
+      DDEV_SCHEME: https
+      DDEV_SITENAME: mosgarage
+      DDEV_TLD: ddev.site
+      DDEV_UID: "1000"
+      DDEV_USER: dev
+      DDEV_VERSION: v1.24.10
+      DOCKER_IP: 127.0.0.1
+      HOST_DOCKER_INTERNAL_IP: ""
+      IS_DDEV_PROJECT: "true"
+      LINES: "12"
+      MYSQL_HISTFILE: /mnt/ddev-global-cache/mysqlhistory/mosgarage-db/mysql_history
+      PGDATABASE: db
+      PGHOST: 127.0.0.1
+      PGPASSWORD: db
+      PGUSER: db
+      POSTGRES_DB: db
+      POSTGRES_PASSWORD: db
+      POSTGRES_USER: db
+      TZ: "Europe/London"   
+      USER: dev
+    hostname: mosgarage-db
+    healthcheck:
+      timeout: 1m10s
+      interval: 1s
+      retries: 70
+      start_period: 4m0s
+      start_interval: 1s
+    image: ddev/ddev-dbserver-mariadb-10.11:v1.24.10-mosgarage-built
+    labels:
+      com.ddev.app-type: php
+      com.ddev.approot: D:\dev\mosgarage
+      com.ddev.platform: ddev
+      com.ddev.site-name: mosgarage
+    networks:
+      ddev_default: null
+      default: null
+    ports:
+      - mode: ingress
+        host_ip: 127.0.0.1
+        target: 3306
+        protocol: tcp
+    restart: "no"
+    stop_grace_period: 1m0s
+    user: 1000:1000
+    volumes:
+      - type: volume
+        source: database
+        target: /var/lib/mysql
+        volume:
+          nocopy: true
+      - type: bind
+        source: D:\dev\mosgarage\.ddev
+        target: /mnt/ddev_config
+        bind:
+          create_host_path: true
+      - type: bind
+        source: D:\dev\mosgarage\.ddev\db_snapshots
+        target: /mnt/snapshots
+        bind:
+          create_host_path: true
+      - type: volume
+        source: ddev-global-cache
+        target: /mnt/ddev-global-cache
+        volume: {}
+    working_dir: /home/dev
+  web:
+    build:
+      context: D:\dev\mosgarage\.ddev\.webimageBuild
+      dockerfile: Dockerfile
+      args:
+        BASE_IMAGE: ddev/ddev-webserver:v1.24.10
+        DDEV_DATABASE: mariadb:10.11
+        DDEV_PHP_VERSION: "8.3"
+        gid: "1000"
+        uid: "1000"
+        username: dev
+    cap_add:
+      - SYS_PTRACE
+    command:
+      - /pre-start.sh
+    container_name: ddev-mosgarage-web
+    environment:
+      COLUMNS: "183"
+      COREPACK_ENABLE_DOWNLOAD_PROMPT: "0"
+      COREPACK_HOME: /mnt/ddev-global-cache/corepack
+      DDEV_APPROOT: /var/www/html
+      DDEV_COMPOSER_ROOT: /var/www/html
+      DDEV_DATABASE: mariadb:10.11
+      DDEV_DATABASE_FAMILY: mysql
+      DDEV_DOCROOT: ""
+      DDEV_FILES_DIR: ""
+      DDEV_FILES_DIRS: ""
+      DDEV_GID: "1000"
+      DDEV_GOARCH: amd64
+      DDEV_GOOS: windows
+      DDEV_HOSTNAME: mosgarage.ddev.site
+      DDEV_MUTAGEN_ENABLED: "true"
+      DDEV_PHP_VERSION: "8.3"
+      DDEV_PRIMARY_URL: https://mosgarage.ddev.site
+      DDEV_PRIMARY_URL_PORT: "443"
+      DDEV_PRIMARY_URL_WITHOUT_PORT: https://mosgarage.ddev.site
+      DDEV_PROJECT: mosgarage
+      DDEV_PROJECT_TYPE: php
+      DDEV_ROUTER_HTTP_PORT: "33000"
+      DDEV_ROUTER_HTTPS_PORT: "443"
+      DDEV_SCHEME: https
+      DDEV_SITENAME: mosgarage
+      DDEV_TLD: ddev.site
+      DDEV_UID: "1000"
+      DDEV_USER: dev
+      DDEV_VERSION: v1.24.10
+      DDEV_WEB_ENTRYPOINT: /mnt/ddev_config/web-entrypoint.d
+      DDEV_WEBSERVER_TYPE: nginx-fpm
+      DDEV_XDEBUG_ENABLED: "false"
+      DDEV_XHPROF_MODE: prepend
+      DEPLOY_NAME: local
+      DOCKER_IP: 127.0.0.1
+      DOCROOT: ""
+      DRUSH_OPTIONS_URI: https://mosgarage.ddev.site
+      HOST_DOCKER_INTERNAL_IP: ""
+      HTTP_EXPOSE: 33000:80,8025:8025
+      HTTPS_EXPOSE: 443:80,8026:8025
+      IS_DDEV_PROJECT: "true"
+      LINES: "12"
+      MYSQL_HISTFILE: /mnt/ddev-global-cache/mysqlhistory/mosgarage-web/mysql_history
+      NODE_EXTRA_CA_CERTS: /mnt/ddev-global-cache/mkcert/rootCA.pem
+      PGDATABASE: db
+      PGHOST: db
+      PGPASSWORD: db
+      PGUSER: db
+      PHP_IDE_CONFIG: serverName=mosgarage.ddev.site
+      SSH_AUTH_SOCK: /home/.ssh-agent/socket
+      START_SCRIPT_TIMEOUT: "117"
+      TZ: ""
+      USER: dev
+      VIRTUAL_HOST: mosgarage.ddev.site
+      npm_config_cache: /mnt/ddev-global-cache/npm
+    hostname: mosgarage-web
+    healthcheck:
+      timeout: 1m10s
+      interval: 1s
+      retries: 70
+      start_period: 4m0s
+      start_interval: 1s
+    image: ddev/ddev-webserver:v1.24.10-mosgarage-built
+    labels:
+      com.ddev.app-type: php
+      com.ddev.approot: D:\dev\mosgarage
+      com.ddev.platform: ddev
+      com.ddev.site-name: mosgarage
+    networks:
+      ddev_default: null
+      default: null
+    ports:
+      - mode: ingress
+        host_ip: 127.0.0.1
+        target: 80
+        protocol: tcp
+      - mode: ingress
+        host_ip: 127.0.0.1
+        target: 443
+        protocol: tcp
+      - mode: ingress
+        host_ip: 127.0.0.1
+        target: 8025
+        protocol: tcp
+    restart: "no"
+    user: 1000:1000
+    volumes:
+      - type: volume
+        source: project_mutagen
+        target: /var/www
+        volume:
+          nocopy: true
+      - type: volume
+        source: project_mutagen
+        target: /tmp/project_mutagen
+        volume:
+          nocopy: true
+      - type: bind
+        source: D:\dev\mosgarage\.ddev
+        target: /mnt/ddev_config
+        read_only: true
+        bind:
+          create_host_path: true
+      - type: bind
+        source: D:\dev\mosgarage\.ddev\xhprof
+        target: /usr/local/bin/xhprof
+        bind:
+          create_host_path: true
+      - type: bind
+        source: D:\dev\mosgarage\.git
+        target: /var/www/html/.git
+        bind:
+          create_host_path: true
+      - type: volume
+        source: ddev-global-cache
+        target: /mnt/ddev-global-cache
+        volume: {}
+      - type: volume
+        source: ddev-ssh-agent_socket_dir
+        target: /home/.ssh-agent
+        volume: {}
+    working_dir: /var/www/html/
+  xhgui:
+    profiles:
+      - xhgui
+    container_name: ddev-mosgarage-xhgui
+    depends_on:
+      db:
+        condition: service_started
+        required: true
+    environment:
+      DDEV_DATABASE_FAMILY: mysql
+      HOST_DOCKER_INTERNAL_IP: ""
+      HTTP_EXPOSE: 8143:80
+      HTTPS_EXPOSE: 8142:80
+      TZ: ""
+      VIRTUAL_HOST: mosgarage.ddev.site
+      XHGUI_PDO_PASS: db
+      XHGUI_PDO_USER: db
+      XHGUI_SAVE_HANDLER: pdo
+    image: ddev/ddev-xhgui:v1.24.10
+    labels:
+      com.ddev.approot: D:\dev\mosgarage
+      com.ddev.site-name: mosgarage
+    networks:
+      ddev_default: null
+      default: null
+    restart: "no"
+    x-ddev:
+      describe-url-port: 'Launch: ddev xhgui'
+networks:
+  ddev_default:
+    name: ddev_default
+    external: true
+  default:
+    name: ddev-mosgarage_default
+    labels:
+      com.ddev.platform: ddev
+volumes:
+  database:
+    name: mosgarage-mariadb
+    external: true
+  ddev-global-cache:
+    name: ddev-global-cache
+    external: true
+  ddev-ssh-agent_socket_dir:
+    name: ddev-ssh-agent_socket_dir
+    external: true
+  project_mutagen:
+    name: mosgarage_project_mutagen
+    external: true

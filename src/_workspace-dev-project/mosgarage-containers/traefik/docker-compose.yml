@@ -1,0 +1,36 @@
+services:
+
+  traefik:
+    image: traefik:v3.3
+    container_name: traefik
+    restart: always    
+    ports:
+      - 80:80/tcp # http
+      - 443:443/tcp # https
+      - 443:443/udp # https http3 quic
+      - 127.0.0.1:8080:8080 # http api dashboard
+    expose:
+      - 80 # http
+      - 443 # https
+      - 8080 # http api dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro # ro = read-only access to the docker.sock
+      - ${DOCKER_VOLUME_STORAGE:-/mnt/docker-volumes}/traefik:/etc/traefik/ # put the provided traefik.yml and fileConfig.yml files at this location
+      - ${DOCKER_VOLUME_STORAGE:-/mnt/docker-volumes}/traefik/logs:/logs
+    environment:
+      - TZ=Europe/London
+      - CF_DNS_API_TOKEN=MyCloudflareApiToken # change this if you use Cloudflare
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.api.rule=Host(`traefik.officialmofabs.com`) # Define the subdomain for the traefik dashboard.
+      - traefik.http.routers.api.service=api@internal # Enable Traefik API.
+      - traefik.http.routers.api.middlewares=local-ipwhitelist@file,basic-auth@file # protect dashboard with basic auth and restrict access to private class subnets only
+      #- traefik.http.middlewares.basic-auth-global.basicauth.users=admin:$$apr1$$epoKf5li$$QfTMJZOCS/halv3CiIUEu0 # protect the traefik dashboard by basic auth (pw=password)
+    extra_hosts:
+      - host.docker.internal:172.17.0.1
+    networks:
+      - proxy    
+
+networks:
+  proxy:
+    external: true
